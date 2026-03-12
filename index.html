@@ -2554,9 +2554,46 @@ function doSendScrollToPlayer(){
   _sendScrollId=null;
 }
 loadFromLocalStorage();
+function initRealtimeListeners(){
+  if(!window._db) return;
+  // Escuchar jugadores
+  window._fsOnSnapshot(window._fsColl(window._db,'players'),(snap)=>{
+    snap.docChanges().forEach(change=>{
+      if(change.type==='added'||change.type==='modified'){
+        APP.players[change.doc.id]={...change.doc.data(),id:change.doc.id};
+      }
+      if(change.type==='removed'){
+        delete APP.players[change.doc.id];
+      }
+    });
+    if(APP.currentScreen==='player-select') renderPlayerSelectList();
+    if(APP.currentScreen==='master') renderPlayersTable();
+    if(APP.currentPlayer){
+      const cp=APP.players[APP.currentPlayer.id];
+      if(cp){ APP.currentPlayer=cp; updatePlayerHeader(); }
+    }
+  });
+  // Escuchar bazar
+  window._fsOnSnapshot(window._fsDoc(window._db,'game','bazar'),(snap)=>{
+    if(snap.exists()){ APP.bazar=snap.data().list||[]; }
+    if(APP.currentScreen==='player') renderBazarPlayer();
+    if(APP.currentScreen==='master') renderBazarMaster();
+  });
+  // Escuchar enemigos
+  window._fsOnSnapshot(window._fsDoc(window._db,'game','enemies'),(snap)=>{
+    if(snap.exists()){ APP.enemies=snap.data().list||[]; }
+    if(APP.currentScreen==='master') renderEnemies();
+  });
+  // Escuchar pergaminos
+  window._fsOnSnapshot(window._fsDoc(window._db,'game','scrolls'),(snap)=>{
+    if(snap.exists()){ APP.scrolls=snap.data().list||[]; }
+    if(APP.currentScreen==='master') renderMasterScrolls();
+  });
+}
 window.addEventListener('firebase-ready',async()=>{
   APP.firebaseReady=true;
   await loadFromFirebase();
+  initRealtimeListeners();
   if(APP.currentScreen==='player-select') renderPlayerSelectList();
   console.log('🔥 Firebase listo');
 });
