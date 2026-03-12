@@ -1,0 +1,2568 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crónicas del Abismo</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-void:#0a0a0f; --bg-deep:#0f0f1a; --bg-panel:#13131f; --bg-card:#1a1a2e;
+  --bg-elevated:#1f1f35; --bg-hover:#252540;
+  --border-dim:#2a2a45; --border-mid:#3a3a60; --border-bright:#5a5a90;
+  --text-ghost:#3a3a55; --text-dim:#6a6a90; --text-mid:#9a9ab8;
+  --text-main:#c8c8e8; --text-bright:#e8e8ff;
+  --gold:#c9a84c; --gold-bright:#e8c870; --gold-dim:#8a6a30;
+  --accent:#7b5ea7; --accent-bright:#9b7ec7; --accent-dim:#4a3a6a;
+  --red:#c94040; --red-bright:#e86060; --green:#40c970; --green-bright:#60e890;
+  --rarity-common:#9a9ab8; --rarity-rare:#40c970; --rarity-great:#4080c9;
+  --rarity-extra:#9b7ec7; --rarity-legendary:#c97a40; --rarity-unique:#c94040;
+  --radius-sm:4px; --radius-md:8px; --radius-lg:14px; --radius-xl:20px;
+  --shadow-card:0 4px 24px rgba(0,0,0,0.5);
+  --transition:0.2s ease;
+  --font-title:'Cinzel',serif; --font-body:'Crimson Text',serif; --font-mono:'Share Tech Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{height:100%}
+body{background:var(--bg-void);color:var(--text-main);font-family:var(--font-body);font-size:16px;line-height:1.5;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(ellipse 80% 60% at 20% 10%,rgba(123,94,167,0.06) 0%,transparent 60%),radial-gradient(ellipse 60% 80% at 80% 90%,rgba(201,168,76,0.04) 0%,transparent 60%);pointer-events:none;z-index:0}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg-deep)}
+::-webkit-scrollbar-thumb{background:var(--border-mid);border-radius:3px}
+h1,h2,h3,h4{font-family:var(--font-title);color:var(--text-bright);letter-spacing:0.05em}
+h1{font-size:2rem;font-weight:900} h2{font-size:1.4rem;font-weight:700}
+h3{font-size:1.1rem;font-weight:600} h4{font-size:0.95rem;font-weight:600}
+p{color:var(--text-main)}
+
+/* BOTONES */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border:1px solid var(--border-mid);border-radius:var(--radius-sm);background:var(--bg-elevated);color:var(--text-main);font-family:var(--font-title);font-size:0.78rem;font-weight:600;letter-spacing:0.08em;cursor:pointer;transition:all var(--transition);text-transform:uppercase;white-space:nowrap}
+.btn:hover{background:var(--bg-hover);border-color:var(--border-bright);color:var(--text-bright);transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn:disabled{opacity:0.4;cursor:not-allowed;transform:none!important}
+.btn-primary{background:var(--accent-dim);border-color:var(--accent);color:var(--text-bright)}
+.btn-primary:hover{background:var(--accent);border-color:var(--accent-bright);box-shadow:0 0 15px rgba(123,94,167,0.4)}
+.btn-gold{background:rgba(201,168,76,0.15);border-color:var(--gold-dim);color:var(--gold)}
+.btn-gold:hover{background:rgba(201,168,76,0.25);border-color:var(--gold);color:var(--gold-bright);box-shadow:0 0 12px rgba(201,168,76,0.3)}
+.btn-danger{background:rgba(201,64,64,0.15);border-color:#7a3030;color:var(--red)}
+.btn-danger:hover{background:rgba(201,64,64,0.25);border-color:var(--red);color:var(--red-bright)}
+.btn-success{background:rgba(64,201,112,0.12);border-color:#306a45;color:var(--green)}
+.btn-success:hover{background:rgba(64,201,112,0.22);border-color:var(--green);color:var(--green-bright)}
+.btn-sm{padding:5px 12px;font-size:0.7rem} .btn-lg{padding:12px 28px;font-size:0.88rem}
+.btn-icon{padding:7px 10px;min-width:34px;justify-content:center}
+
+/* INPUTS */
+input,select,textarea{background:var(--bg-deep);border:1px solid var(--border-dim);border-radius:var(--radius-sm);color:var(--text-bright);font-family:var(--font-body);font-size:0.95rem;padding:8px 12px;transition:border-color var(--transition),box-shadow var(--transition);width:100%;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(123,94,167,0.2)}
+input::placeholder{color:var(--text-ghost)}
+select option{background:var(--bg-panel)}
+label{display:block;font-family:var(--font-title);font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:5px}
+.form-group{margin-bottom:14px}
+.input-row{display:flex;gap:10px;align-items:flex-end}
+.input-row .form-group{flex:1;margin-bottom:0}
+input[type="range"]{-webkit-appearance:none;height:4px;background:var(--bg-elevated);border:none;border-radius:2px;padding:0}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--accent-bright)}
+
+/* CARDS */
+.card{background:var(--bg-card);border:1px solid var(--border-dim);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-card)}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border-dim)}
+.card-header h3{margin:0}
+.panel{background:var(--bg-panel);border:1px solid var(--border-dim);border-radius:var(--radius-md);padding:16px}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:var(--radius-sm);font-family:var(--font-title);font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase}
+.badge-common{background:rgba(154,154,184,0.15);color:var(--rarity-common);border:1px solid rgba(154,154,184,0.3)}
+.badge-rare{background:rgba(64,201,112,0.12);color:var(--rarity-rare);border:1px solid rgba(64,201,112,0.3)}
+.badge-great{background:rgba(64,128,201,0.12);color:var(--rarity-great);border:1px solid rgba(64,128,201,0.3)}
+.badge-extra{background:rgba(155,126,199,0.15);color:var(--rarity-extra);border:1px solid rgba(155,126,199,0.3)}
+.badge-legendary{background:rgba(201,122,64,0.15);color:var(--rarity-legendary);border:1px solid rgba(201,122,64,0.3)}
+.badge-unique{background:rgba(201,64,64,0.15);color:var(--rarity-unique);border:1px solid rgba(201,64,64,0.3)}
+
+/* ITEM CARDS */
+.item-card{background:var(--bg-card);border-radius:var(--radius-md);padding:14px;position:relative;transition:transform var(--transition),box-shadow var(--transition)}
+.item-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-card)}
+.item-card.rarity-common{border:1px solid rgba(154,154,184,0.4)}
+.item-card.rarity-rare{border:1px solid rgba(64,201,112,0.4);box-shadow:0 0 10px rgba(64,201,112,0.1)}
+.item-card.rarity-great{border:1px solid rgba(64,128,201,0.4);box-shadow:0 0 10px rgba(64,128,201,0.1)}
+.item-card.rarity-extra{border:1px solid rgba(155,126,199,0.4);box-shadow:0 0 10px rgba(155,126,199,0.1)}
+.item-card.rarity-legendary{border:1px solid rgba(201,122,64,0.5);box-shadow:0 0 14px rgba(201,122,64,0.2)}
+.item-card.rarity-unique{border:1px solid rgba(201,64,64,0.5);box-shadow:0 0 14px rgba(201,64,64,0.2)}
+.item-type{font-family:var(--font-title);font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);margin-bottom:2px}
+.item-name{font-family:var(--font-title);font-size:0.95rem;font-weight:700;color:var(--text-bright)}
+.item-quality{font-style:italic;color:var(--text-mid);font-size:0.88rem}
+.item-stats{margin-top:8px;display:flex;flex-wrap:wrap;gap:5px}
+.item-stat{background:var(--bg-elevated);border:1px solid var(--border-dim);border-radius:var(--radius-sm);padding:2px 7px;font-family:var(--font-mono);font-size:0.72rem;color:var(--text-mid)}
+.item-stat span{color:var(--gold);font-weight:700}
+.item-value{margin-top:8px;font-family:var(--font-mono);font-size:0.78rem;color:var(--gold-dim)}
+.item-value span{color:var(--gold)}
+
+/* STAT CELLS */
+.stat-block{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+.stat-cell{background:var(--bg-elevated);border:1px solid var(--border-dim);border-radius:var(--radius-sm);padding:10px 8px;text-align:center;transition:border-color var(--transition)}
+.stat-cell:hover{border-color:var(--border-bright)}
+.stat-label{font-family:var(--font-title);font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-dim);margin-bottom:4px}
+.stat-value{font-family:var(--font-mono);font-size:1.3rem;color:var(--text-bright);font-weight:700}
+.stat-mod{font-family:var(--font-mono);font-size:0.75rem;color:var(--gold)}
+
+/* TABS */
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--border-dim);margin-bottom:20px;overflow-x:auto;padding-bottom:0}
+.tab-btn{padding:10px 18px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--text-dim);font-family:var(--font-title);font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all var(--transition);white-space:nowrap;margin-bottom:-1px}
+.tab-btn:hover{color:var(--text-main)}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity var(--transition)}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--bg-panel);border:1px solid var(--border-mid);border-radius:var(--radius-xl);padding:28px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.6);transform:scale(0.95);transition:transform var(--transition)}
+.modal-overlay.open .modal{transform:scale(1)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.modal-close{background:none;border:none;color:var(--text-dim);font-size:1.4rem;cursor:pointer;padding:4px 8px;transition:color var(--transition);line-height:1}
+.modal-close:hover{color:var(--text-bright)}
+.modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;padding-top:16px;border-top:1px solid var(--border-dim)}
+
+/* TOAST */
+#toast-container{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast{background:var(--bg-panel);border:1px solid var(--border-mid);border-radius:var(--radius-md);padding:12px 18px;font-family:var(--font-title);font-size:0.75rem;letter-spacing:0.06em;color:var(--text-bright);box-shadow:var(--shadow-card);animation:toastIn 0.3s ease;max-width:300px}
+.toast.success{border-left:3px solid var(--green)}
+.toast.error{border-left:3px solid var(--red)}
+.toast.info{border-left:3px solid var(--accent)}
+.toast.gold{border-left:3px solid var(--gold)}
+@keyframes toastIn{from{transform:translateX(20px);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* PANTALLAS */
+.screen{display:none}
+.screen.active{display:flex}
+#screen-master.active,#screen-player.active{display:flex}
+.fade-in{animation:fadeIn 0.35s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* LOGIN */
+#screen-login{min-height:100vh;flex-direction:column;align-items:center;justify-content:center;padding:20px;position:relative;z-index:1}
+.login-logo{text-align:center;margin-bottom:48px}
+.logo-icon{font-size:3.5rem;margin-bottom:10px;display:block;filter:drop-shadow(0 0 20px rgba(201,168,76,0.5));animation:floatLogo 4s ease-in-out infinite}
+@keyframes floatLogo{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.login-logo h1{font-size:2.6rem;background:linear-gradient(135deg,var(--gold-dim),var(--gold-bright),var(--gold-dim));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:0.12em}
+.login-logo p{color:var(--text-dim);font-style:italic;font-size:1.05rem;margin-top:4px}
+.login-options{display:flex;gap:20px;width:100%;max-width:700px}
+.login-card{flex:1;background:var(--bg-card);border:1px solid var(--border-dim);border-radius:var(--radius-xl);padding:32px 28px;text-align:center;cursor:pointer;transition:all 0.3s ease;position:relative;overflow:hidden}
+.login-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.3s ease;border-radius:var(--radius-xl)}
+.login-card.master::before{background:radial-gradient(ellipse at top,rgba(201,168,76,0.1) 0%,transparent 70%)}
+.login-card.player::before{background:radial-gradient(ellipse at top,rgba(123,94,167,0.1) 0%,transparent 70%)}
+.login-card:hover::before{opacity:1}
+.login-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-card)}
+.login-card.master:hover{border-color:var(--gold-dim)}
+.login-card.player:hover{border-color:var(--accent)}
+.login-card .card-icon{font-size:2.8rem;margin-bottom:14px;display:block}
+.login-card h2{font-size:1.1rem;letter-spacing:0.15em;margin-bottom:8px}
+.login-card.master h2{color:var(--gold)}
+.login-card.player h2{color:var(--accent-bright)}
+.login-card p{font-size:0.88rem;color:var(--text-dim);font-style:italic}
+
+/* AUTH BOX */
+#screen-master-login,#screen-player-login{min-height:100vh;align-items:center;justify-content:center;padding:20px;position:relative;z-index:1}
+.auth-box{background:var(--bg-panel);border:1px solid var(--border-mid);border-radius:var(--radius-xl);padding:40px 36px;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+.back-btn{background:none;border:none;color:var(--text-dim);font-family:var(--font-title);font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;padding:0 0 20px 0;transition:color var(--transition);display:flex;align-items:center;gap:6px}
+.back-btn:hover{color:var(--text-main)}
+.auth-box h2{margin-bottom:6px}
+.subtitle{color:var(--text-dim);font-style:italic;font-size:0.9rem;margin-bottom:28px}
+.auth-error{background:rgba(201,64,64,0.1);border:1px solid rgba(201,64,64,0.3);border-radius:var(--radius-sm);padding:10px 14px;color:var(--red-bright);font-size:0.85rem;margin-bottom:14px;display:none}
+.auth-error.show{display:block}
+
+/* PLAYER SELECT */
+#screen-player-select{min-height:100vh;flex-direction:column;align-items:center;justify-content:center;padding:20px;position:relative;z-index:1}
+.player-select-header{text-align:center;margin-bottom:36px}
+.player-select-header h2{color:var(--accent-bright);margin-bottom:4px}
+.player-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;width:100%;max-width:700px}
+.player-avatar-btn{background:var(--bg-card);border:1px solid var(--border-dim);border-radius:var(--radius-lg);padding:22px 16px;text-align:center;cursor:pointer;transition:all 0.3s ease}
+.player-avatar-btn:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.4),0 0 15px rgba(123,94,167,0.2)}
+.player-avatar-btn .avatar-icon{font-size:2.2rem;margin-bottom:10px;display:block}
+.player-avatar-btn .player-name{font-family:var(--font-title);font-size:0.85rem;font-weight:700;color:var(--text-bright);letter-spacing:0.06em}
+.player-avatar-btn .player-coins{font-family:var(--font-mono);font-size:0.75rem;color:var(--gold);margin-top:4px}
+
+/* MASTER PANEL */
+#screen-master{flex-direction:column;min-height:100vh;position:relative;z-index:1}
+.master-header{background:var(--bg-panel);border-bottom:1px solid var(--border-dim);padding:0 24px;display:flex;align-items:center;gap:20px;height:56px;position:sticky;top:0;z-index:100}
+.logo-text{font-family:var(--font-title);font-size:0.95rem;font-weight:700;color:var(--gold);letter-spacing:0.1em;white-space:nowrap}
+.logo-text span{font-size:0.7rem;color:var(--text-dim);display:block;letter-spacing:0.15em}
+.master-nav{display:flex;gap:2px;flex:1;overflow-x:auto}
+.master-nav-btn{padding:8px 14px;background:transparent;border:none;border-radius:var(--radius-sm);color:var(--text-dim);font-family:var(--font-title);font-size:0.7rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all var(--transition);white-space:nowrap}
+.master-nav-btn:hover{color:var(--text-main);background:var(--bg-elevated)}
+.master-nav-btn.active{color:var(--gold);background:rgba(201,168,76,0.1)}
+.exit-btn-master{background:rgba(201,64,64,0.1);border:1px solid rgba(201,64,64,0.3);border-radius:var(--radius-sm);padding:6px 12px;color:var(--red);font-family:var(--font-title);font-size:0.7rem;font-weight:600;letter-spacing:0.1em;cursor:pointer;transition:all var(--transition);white-space:nowrap}
+.exit-btn-master:hover{background:rgba(201,64,64,0.2);color:var(--red-bright)}
+.master-content{flex:1;padding:28px 24px;max-width:1400px;width:100%;margin:0 auto}
+.master-section{display:none}
+.master-section.active{display:block}
+
+/* PLAYER PANEL */
+#screen-player{flex-direction:column;min-height:100vh;position:relative;z-index:1}
+.player-header{background:var(--bg-panel);border-bottom:1px solid var(--border-dim);padding:0 20px;display:flex;align-items:center;gap:14px;height:56px;position:sticky;top:0;z-index:100}
+.player-name-display{font-family:var(--font-title);font-size:0.9rem;font-weight:700;color:var(--accent-bright);letter-spacing:0.08em;white-space:nowrap}
+.coins-display{display:flex;align-items:center;gap:5px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);border-radius:var(--radius-sm);padding:4px 10px;font-family:var(--font-mono);font-size:0.82rem;color:var(--gold);white-space:nowrap}
+.player-nav{display:flex;gap:2px;flex:1;overflow-x:auto;justify-content:center}
+.player-nav-btn{padding:7px 12px;background:transparent;border:none;border-radius:var(--radius-sm);color:var(--text-dim);font-family:var(--font-title);font-size:0.68rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all var(--transition);white-space:nowrap}
+.player-nav-btn:hover{color:var(--text-main);background:var(--bg-elevated)}
+.player-nav-btn.active{color:var(--accent-bright);background:rgba(123,94,167,0.1)}
+.exit-btn-player{background:none;border:1px solid var(--border-dim);border-radius:var(--radius-sm);padding:5px 10px;color:var(--text-dim);font-family:var(--font-title);font-size:0.68rem;font-weight:600;cursor:pointer;transition:all var(--transition);white-space:nowrap}
+.exit-btn-player:hover{color:var(--text-main);border-color:var(--border-bright)}
+.player-content{flex:1;padding:24px 20px;max-width:1200px;width:100%;margin:0 auto}
+.player-section{display:none}
+.player-section.active{display:block}
+
+/* LAYOUTS */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.grid-auto{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.grid-items{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.flex-row{display:flex;gap:12px;align-items:center}
+.flex-sb{display:flex;gap:12px;align-items:center;justify-content:space-between}
+.flex-col{display:flex;flex-direction:column;gap:10px}
+.flex-wrap{flex-wrap:wrap}
+.flex-1{flex:1}
+.w-full{width:100%}
+.mt-8{margin-top:8px} .mt-16{margin-top:16px} .mt-24{margin-top:24px}
+.mb-8{margin-bottom:8px} .mb-16{margin-bottom:16px}
+.text-center{text-align:center}
+.gold-value{color:var(--gold);font-family:var(--font-mono)}
+.mono{font-family:var(--font-mono)}
+
+/* TABLA */
+.data-table{width:100%;border-collapse:collapse;font-size:0.9rem}
+.data-table th{background:var(--bg-elevated);padding:10px 14px;text-align:left;font-family:var(--font-title);font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-dim);border-bottom:1px solid var(--border-mid)}
+.data-table td{padding:10px 14px;border-bottom:1px solid var(--border-dim);color:var(--text-main)}
+.data-table tr:hover td{background:var(--bg-elevated)}
+.data-table tr:last-child td{border-bottom:none}
+
+/* SECTION TITLE */
+.section-title{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.section-title h2,.section-title h3{margin:0}
+.title-line{flex:1;height:1px;background:linear-gradient(90deg,var(--border-mid),transparent)}
+.empty-state{text-align:center;padding:48px 20px;color:var(--text-ghost)}
+.empty-state .empty-icon{font-size:2.5rem;margin-bottom:12px;display:block;opacity:0.4}
+.empty-state p{font-style:italic;font-size:0.9rem}
+
+/* FICHA COLUMNAS */
+.ficha-row{display:grid;grid-template-columns:1fr 80px 80px 90px;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--radius-sm);transition:background var(--transition)}
+.ficha-row:hover{background:var(--bg-elevated)}
+.ficha-row.header{background:var(--bg-elevated);font-family:var(--font-title);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);padding:6px 10px;border-radius:var(--radius-sm);margin-bottom:4px}
+.ficha-stat-name{font-family:var(--font-title);font-size:0.78rem;color:var(--text-main);letter-spacing:0.04em}
+.ficha-stat-src{font-size:0.62rem;color:var(--text-ghost);display:block}
+.ficha-col{font-family:var(--font-mono);font-size:0.9rem;text-align:center}
+.ficha-col.auto{color:var(--text-mid)}
+.ficha-col.manual input{width:60px;text-align:center;font-family:var(--font-mono);font-size:0.85rem;padding:4px 6px;background:rgba(123,94,167,0.1);border-color:var(--accent-dim)}
+.ficha-col.total{color:var(--gold);font-weight:700;font-size:1rem}
+.ficha-mod{font-size:0.7rem;color:var(--gold-dim);display:block}
+
+/* EQUIP SLOTS */
+.equip-slot{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--border-dim);border-radius:var(--radius-md);margin-bottom:8px;background:var(--bg-elevated);transition:border-color var(--transition)}
+.equip-slot:hover{border-color:var(--border-bright)}
+.equip-slot-icon{font-size:1.5rem;width:36px;text-align:center;flex-shrink:0}
+.equip-slot-info{flex:1;min-width:0}
+.equip-slot-label{font-family:var(--font-title);font-size:0.62rem;letter-spacing:0.12em;color:var(--text-dim);text-transform:uppercase}
+.equip-slot-item{font-size:0.88rem;color:var(--text-bright);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.equip-slot-empty{color:var(--text-ghost);font-style:italic;font-size:0.85rem}
+
+/* HP BAR */
+.hp-bar-wrap{background:var(--bg-elevated);border-radius:4px;height:10px;overflow:hidden;margin-top:12px}
+.hp-bar{height:100%;border-radius:4px;transition:width 0.4s ease,background 0.4s ease}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .login-options{flex-direction:column;max-width:340px}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+  .master-content,.player-content{padding:16px 14px}
+  .auth-box{padding:28px 22px}
+  .master-header{padding:0 14px;gap:10px}
+  .player-header{padding:0 14px;gap:8px}
+  .login-logo h1{font-size:1.9rem}
+  .ficha-row{grid-template-columns:1fr 60px 60px 70px}
+}
+@media(max-width:480px){
+  .player-list{grid-template-columns:repeat(2,1fr)}
+  .stat-block{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- TOAST CONTAINER -->
+<div id="toast-container"></div>
+
+<!-- PANTALLA 1: LOGIN -->
+<div id="screen-login" class="screen active">
+  <div class="login-logo">
+    <span class="logo-icon">⚔️</span>
+    <h1>Crónicas del Abismo</h1>
+    <p>Sistema de apoyo para partidas de rol</p>
+  </div>
+  <div class="login-options">
+    <div class="login-card master" onclick="showScreen('master-login')">
+      <span class="card-icon">👑</span>
+      <h2>Maestro</h2>
+      <p>Accede al panel de control de la partida</p>
+    </div>
+    <div class="login-card player" onclick="showScreen('player-select')">
+      <span class="card-icon">⚔️</span>
+      <h2>Jugadores</h2>
+      <p>Accede a tu personaje y aventúrate</p>
+    </div>
+  </div>
+</div>
+
+<!-- PANTALLA 2: LOGIN MASTER -->
+<div id="screen-master-login" class="screen">
+  <div class="auth-box">
+    <button class="back-btn" onclick="showScreen('login')">← Volver</button>
+    <h2>👑 Acceso Maestro</h2>
+    <p class="subtitle">Introduce la contraseña maestra</p>
+    <div id="master-auth-error" class="auth-error">Contraseña incorrecta</div>
+    <div class="form-group">
+      <label>Contraseña</label>
+      <input type="password" id="master-password-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')doMasterLogin()">
+    </div>
+    <button class="btn btn-gold w-full btn-lg" onclick="doMasterLogin()">Entrar como Maestro</button>
+    <p style="margin-top:14px;font-size:0.78rem;color:var(--text-ghost);text-align:center;font-style:italic">
+      Por defecto: <span style="color:var(--text-dim);font-family:var(--font-mono)">master123</span>
+    </p>
+  </div>
+</div>
+
+<!-- PANTALLA 3: SELECCIÓN JUGADOR -->
+<div id="screen-player-select" class="screen">
+  <div class="player-select-header">
+    <button class="back-btn" onclick="showScreen('login')" style="margin:0 auto 12px">← Volver</button>
+    <h2>⚔️ Elige tu Personaje</h2>
+    <p>Selecciona tu aventurero para continuar</p>
+  </div>
+  <div class="player-list" id="player-select-list">
+    <div class="empty-state" style="grid-column:1/-1">
+      <span class="empty-icon">👤</span>
+      <p>No hay personajes creados.<br>El Maestro debe crear jugadores primero.</p>
+    </div>
+  </div>
+</div>
+
+<!-- PANTALLA 4: LOGIN JUGADOR -->
+<div id="screen-player-login" class="screen">
+  <div class="auth-box">
+    <button class="back-btn" onclick="showScreen('player-select')">← Volver</button>
+    <h2 id="player-login-name">Personaje</h2>
+    <p class="subtitle" id="player-login-subtitle">Introduce tu contraseña</p>
+    <div id="player-auth-error" class="auth-error">Contraseña incorrecta</div>
+    <div class="form-group">
+      <label id="player-password-label">Contraseña</label>
+      <input type="password" id="player-password-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')doPlayerLogin()">
+    </div>
+    <div class="form-group" id="player-confirm-group" style="display:none">
+      <label>Confirmar contraseña</label>
+      <input type="password" id="player-password-confirm" placeholder="••••••••">
+    </div>
+    <button class="btn btn-primary w-full btn-lg" id="player-login-btn" onclick="doPlayerLogin()">Entrar</button>
+  </div>
+</div>
+
+<!-- PANTALLA 5: MASTER PANEL -->
+<div id="screen-master" class="screen">
+  <header class="master-header">
+    <div class="logo-text">⚔️ Crónicas<span>Panel del Maestro</span></div>
+    <nav class="master-nav">
+      <button class="master-nav-btn active" onclick="showMasterSection('usuarios',this)">👥 Usuarios</button>
+      <button class="master-nav-btn" onclick="showMasterSection('bonificadores',this)">⚡ Bonos</button>
+      <button class="master-nav-btn" onclick="showMasterSection('creacion',this)">🔨 Creación</button>
+      <button class="master-nav-btn" onclick="showMasterSection('pergaminos',this)">📜 Pergaminos</button>
+      <button class="master-nav-btn" onclick="showMasterSection('diccionario',this)">📖 Diccionario</button>
+      <button class="master-nav-btn" onclick="showMasterSection('enemigos',this)">💀 Enemigos</button>
+    </nav>
+    <button class="exit-btn-master" onclick="exitMaster()">Salir ✕</button>
+  </header>
+  <main class="master-content">
+
+    <!-- USUARIOS -->
+    <section id="master-usuarios" class="master-section active fade-in">
+      <div class="section-title">
+        <h2>👥 Usuarios</h2><div class="title-line"></div>
+        <button class="btn btn-gold" onclick="openModal('modal-create-player')">+ Crear Jugador</button>
+      </div>
+      <div class="card">
+        <table class="data-table">
+          <thead><tr><th>Personaje</th><th>Estado</th><th>Monedas</th><th>Modificar</th><th>Acciones</th></tr></thead>
+          <tbody id="players-tbody">
+            <tr><td colspan="5" class="text-center" style="padding:40px;color:var(--text-ghost);font-style:italic">No hay jugadores creados</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- BONIFICADORES -->
+    <section id="master-bonificadores" class="master-section fade-in">
+      <div class="section-title"><h2>⚡ Bonificadores</h2><div class="title-line"></div></div>
+      <div class="card mb-16">
+        <div class="card-header">
+          <h3>Aplicar a</h3>
+          <div class="flex-row">
+            <label style="margin:0;white-space:nowrap">Jugador:</label>
+            <select id="bonus-target-select" style="width:200px"><option value="all">— Todos los jugadores —</option></select>
+          </div>
+        </div>
+        <p style="font-size:0.85rem;color:var(--text-dim);font-style:italic;margin-bottom:16px">Positivos = bonificador. Negativos = penalizador. Afectan sobre los valores base del jugador.</p>
+        <h4 style="margin-bottom:10px;color:var(--gold)">Atributos</h4>
+        <div id="bonus-attrs" class="stat-block mb-16"></div>
+        <h4 style="margin-bottom:10px;color:var(--gold)">Combate</h4>
+        <div id="bonus-combat" class="stat-block mb-16"></div>
+        <h4 style="margin-bottom:10px;color:var(--gold)">Habilidades</h4>
+        <div id="bonus-skills" class="stat-block mb-16"></div>
+        <div class="flex-row" style="justify-content:flex-end;gap:10px">
+          <button class="btn btn-danger" onclick="resetBonuses()">↺ Restaurar todo a 0</button>
+          <button class="btn btn-gold" onclick="saveBonuses()">💾 Guardar y Aplicar</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CREACION -->
+    <section id="master-creacion" class="master-section fade-in">
+      <div class="section-title"><h2>🔨 Creación</h2><div class="title-line"></div></div>
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('creacion','objetos',this)">Objetos</button>
+        <button class="tab-btn" onclick="switchTab('creacion','cofres',this)">Cofres</button>
+        <button class="tab-btn" onclick="switchTab('creacion','pociones',this)">Pociones</button>
+        <button class="tab-btn" onclick="switchTab('creacion','pergscreate',this)">Pergaminos</button>
+        <button class="tab-btn" onclick="switchTab('creacion','bazar',this)">Bazar</button>
+      </div>
+      <div id="creacion-tab-objetos" class="tab-content active">
+        <div class="grid-2 mb-16">
+          <div class="card">
+            <div class="card-header"><h3>🎲 Generar Aleatorio</h3></div>
+            <div class="form-group"><label>Tipo</label>
+              <select id="gen-obj-type">
+                <option value="random">Aleatorio</option><option value="arma">Arma</option>
+                <option value="arma_dist">Arma a distancia</option><option value="escudo">Escudo</option>
+                <option value="yelmo">Yelmo</option><option value="armadura">Armadura</option>
+                <option value="accesorio">Accesorio</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Valor de generación</label>
+              <input type="number" id="gen-obj-value" value="50" min="1" max="9999">
+            </div>
+            <button class="btn btn-gold w-full" onclick="generateRandomItem()">🎲 Generar</button>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>✚ Crear Manual</h3></div>
+            <div class="form-group"><label>Tipo</label>
+              <select id="manual-obj-type" onchange="updateManualForm()">
+                <option value="arma">Arma</option><option value="arma_dist">Arma a distancia</option>
+                <option value="escudo">Escudo</option><option value="yelmo">Yelmo</option>
+                <option value="armadura">Armadura</option><option value="accesorio">Accesorio</option>
+              </select>
+            </div>
+            <div id="manual-form-fields"></div>
+            <button class="btn btn-primary w-full" onclick="createManualItem()">✚ Crear</button>
+          </div>
+        </div>
+        <div class="section-title"><h3>Objetos creados</h3><div class="title-line"></div></div>
+        <div class="grid-items" id="created-items-grid">
+          <div class="empty-state" style="grid-column:1/-1"><span class="empty-icon">📦</span><p>Genera o crea objetos para verlos aquí</p></div>
+        </div>
+      </div>
+      <div id="creacion-tab-cofres" class="tab-content">
+        <div class="card" style="max-width:700px">
+          <div class="card-header"><h3>⚙️ Configurar Cofres</h3></div>
+          <div id="chest-config-form"></div>
+          <div class="form-group mt-16">
+            <label>Sesgo de generación <span id="chest-bias-label" style="color:var(--gold)">0</span></label>
+            <div class="flex-row"><span style="font-size:0.8rem;color:var(--text-dim)">Peor</span>
+              <input type="range" id="chest-bias" min="-50" max="50" value="0" style="flex:1">
+              <span style="font-size:0.8rem;color:var(--text-dim)">Mejor</span>
+            </div>
+          </div>
+          <button class="btn btn-gold" onclick="saveChestConfig()">💾 Guardar configuración</button>
+        </div>
+      </div>
+      <div id="creacion-tab-pociones" class="tab-content">
+        <div class="card" style="max-width:400px">
+          <div class="card-header"><h3>🧪 Crear Poción</h3></div>
+          <div class="form-group"><label>Valor de curación</label><input type="number" id="potion-heal" value="20" min="1"></div>
+          <div class="form-group"><label>Cantidad</label><input type="number" id="potion-qty" value="1" min="1" max="99"></div>
+          <button class="btn btn-success w-full" onclick="createPotion()">✚ Crear</button>
+        </div>
+      </div>
+      <div id="creacion-tab-pergscreate" class="tab-content">
+        <div class="card" style="max-width:500px">
+          <div class="card-header"><h3>📜 Crear Pergamino</h3></div>
+          <div class="form-group"><label>Nombre del hechizo</label><input type="text" id="scroll-name" placeholder="Ej: Bola de Fuego"></div>
+          <div class="form-group"><label>Descripción / Efecto</label><textarea id="scroll-desc" rows="3" placeholder="Describe el efecto..."></textarea></div>
+          <div class="grid-2">
+            <div class="form-group"><label>Usos</label><input type="number" id="scroll-uses" value="3" min="1"></div>
+            <div class="form-group"><label>Int. mínima</label><input type="number" id="scroll-int-req" value="10" min="0"></div>
+          </div>
+          <div class="form-group"><label>Valor en monedas</label><input type="number" id="scroll-value" value="50" min="1"></div>
+          <button class="btn btn-primary w-full" onclick="createScroll()">✚ Crear Pergamino</button>
+        </div>
+      </div>
+      <div id="creacion-tab-bazar" class="tab-content">
+        <div class="section-title"><h3>🏪 Bazar del Maestro</h3><div class="title-line"></div></div>
+        <p style="font-size:0.85rem;color:var(--text-dim);font-style:italic;margin-bottom:16px">Envía objetos creados al bazar para que los jugadores los compren.</p>
+        <div class="grid-items" id="bazar-master-grid">
+          <div class="empty-state" style="grid-column:1/-1"><span class="empty-icon">🏪</span><p>El bazar está vacío</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PERGAMINOS -->
+    <section id="master-pergaminos" class="master-section fade-in">
+      <div class="section-title"><h2>📜 Pergaminos</h2><div class="title-line"></div></div>
+      <div class="grid-items" id="master-scrolls-grid">
+        <div class="empty-state" style="grid-column:1/-1"><span class="empty-icon">📜</span><p>Crea pergaminos en la sección Creación</p></div>
+      </div>
+    </section>
+
+    <!-- DICCIONARIO -->
+    <section id="master-diccionario" class="master-section fade-in">
+      <div class="section-title"><h2>📖 Diccionario</h2><div class="title-line"></div></div>
+      <p style="font-size:0.88rem;color:var(--text-dim);font-style:italic;margin-bottom:20px">Nombres y cualidades para la generación aleatoria de objetos.</p>
+      <div id="dictionary-grid"></div>
+    </section>
+
+    <!-- ENEMIGOS -->
+    <section id="master-enemigos" class="master-section fade-in">
+      <div class="section-title">
+        <h2>💀 Enemigos</h2><div class="title-line"></div>
+        <button class="btn btn-danger" onclick="clearAllEnemies()">🗑 Borrar todos</button>
+      </div>
+      <div class="grid-2 mb-16">
+        <div class="card">
+          <div class="card-header"><h3>Generar Enemigo</h3></div>
+          <div class="form-group"><label>Valor de generación</label><input type="number" id="enemy-gen-value" value="50" min="1"></div>
+          <div class="flex-row" style="gap:8px">
+            <button class="btn btn-danger flex-1" onclick="generateEnemy()">🎲 Aleatorio</button>
+            <button class="btn flex-1" onclick="openModal('modal-create-enemy')">✚ Manual</button>
+          </div>
+        </div>
+      </div>
+      <div class="grid-auto" id="enemies-grid">
+        <div class="empty-state" style="grid-column:1/-1"><span class="empty-icon">💀</span><p>No hay enemigos</p></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- PANTALLA 6: JUGADOR PANEL -->
+<div id="screen-player" class="screen">
+  <header class="player-header">
+    <div class="player-name-display" id="player-header-name">Aventurero</div>
+    <div class="coins-display">🪙 <span id="player-header-coins">0</span></div>
+    <nav class="player-nav">
+      <button class="player-nav-btn active" onclick="showPlayerSection('inicio',this)">🏠 Inicio</button>
+      <button class="player-nav-btn" onclick="showPlayerSection('ficha',this)">📋 Ficha</button>
+      <button class="player-nav-btn" onclick="showPlayerSection('equipo',this)">🛡 Equipo</button>
+      <button class="player-nav-btn" onclick="showPlayerSection('magia',this)">✨ Magia</button>
+      <button class="player-nav-btn" onclick="showPlayerSection('tienda',this)">🏪 Tienda</button>
+    </nav>
+    <button class="exit-btn-player" onclick="exitPlayer()">Salir ✕</button>
+  </header>
+  <main class="player-content">
+
+    <!-- INICIO -->
+    <section id="player-inicio" class="player-section active fade-in">
+      <div class="grid-2 mb-16">
+        <div class="card">
+          <div class="card-header">
+            <h3>❤️ Puntos de Vida</h3>
+            <button class="btn btn-success btn-sm" onclick="fullHeal()">💚 Curar</button>
+          </div>
+          <div style="text-align:center;padding:8px 0">
+            <div style="font-family:var(--font-title);font-size:0.7rem;color:var(--text-dim);margin-bottom:6px;letter-spacing:0.1em">VIDA ACTUAL / MÁXIMA</div>
+            <div class="flex-row" style="justify-content:center;gap:14px">
+              <button class="btn btn-danger btn-icon" onclick="changeHPBy(-1)" style="font-size:1.2rem;padding:8px 12px">−</button>
+              <div>
+                <span id="player-hp-current" style="font-family:var(--font-mono);font-size:3rem;color:var(--red-bright);font-weight:700;line-height:1">10</span>
+                <span style="font-family:var(--font-mono);font-size:1.4rem;color:var(--text-dim)"> / </span>
+                <span id="player-hp-max" style="font-family:var(--font-mono);font-size:1.8rem;color:var(--text-mid)">10</span>
+              </div>
+              <button class="btn btn-success btn-icon" onclick="changeHPBy(1)" style="font-size:1.2rem;padding:8px 12px">+</button>
+            </div>
+            <div class="flex-row mt-8" style="justify-content:center;gap:8px">
+              <input type="number" id="hp-amount" value="1" min="1" style="width:70px;text-align:center;font-family:var(--font-mono)">
+              <button class="btn btn-danger btn-sm" onclick="changeHPBy(-1,true)">− Restar</button>
+              <button class="btn btn-success btn-sm" onclick="changeHPBy(1,true)">+ Sumar</button>
+            </div>
+          </div>
+          <div class="hp-bar-wrap"><div id="hp-bar" class="hp-bar" style="width:100%;background:linear-gradient(90deg,var(--green),var(--green-bright))"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>📊 Panel de Info</h3>
+            <button class="btn btn-sm" onclick="openCustomPanelModal()">✎ Editar</button>
+          </div>
+          <div class="grid-auto" id="custom-info-panel">
+            <div class="empty-state" style="grid-column:1/-1"><span class="empty-icon">📊</span><p>Pulsa Editar para añadir estadísticas</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FICHA -->
+    <section id="player-ficha" class="player-section fade-in">
+      <div class="section-title">
+        <h2>📋 Ficha</h2><div class="title-line"></div>
+        <button class="btn btn-sm" id="btn-edit-ficha" onclick="toggleEditFicha()">✎ Editar Ficha</button>
+      </div>
+      <div class="flex-row mb-16" style="gap:20px;flex-wrap:wrap;font-size:0.8rem;color:var(--text-dim)">
+        <span><span style="color:var(--text-mid)">●</span> <b>Auto</b>: base + equipo + bonos</span>
+        <span><span style="color:var(--accent-bright)">●</span> <b>Manual</b>: tú lo ajustas</span>
+        <span><span style="color:var(--gold)">●</span> <b>Total</b>: suma final</span>
+      </div>
+      <div class="card mb-16"><div class="card-header"><h3>💪 Atributos</h3></div><div id="ficha-attrs"></div></div>
+      <div class="card mb-16"><div class="card-header"><h3>⚔️ Combate</h3></div><div id="ficha-combat"></div></div>
+      <div class="card"><div class="card-header"><h3>🎲 Habilidades</h3></div><div id="ficha-skills"></div></div>
+      <div id="ficha-edit-bar" style="display:none;position:sticky;bottom:16px;background:var(--bg-panel);border:1px solid var(--border-mid);border-radius:var(--radius-md);padding:12px 16px;margin-top:16px;justify-content:flex-end;gap:10px;box-shadow:var(--shadow-card)">
+        <button class="btn" onclick="cancelEditFicha()">✕ Cancelar</button>
+        <button class="btn btn-gold" onclick="saveEditFicha()">💾 Guardar</button>
+      </div>
+    </section>
+
+    <!-- EQUIPO -->
+    <section id="player-equipo" class="player-section fade-in">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><h3>🛡 Equipo Equipado</h3></div>
+          <div id="equipped-slots"></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>🎒 Inventario</h3>
+            <span id="inventory-count" style="font-family:var(--font-mono);font-size:0.8rem;color:var(--text-dim)">0 objetos</span>
+          </div>
+          <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('inv','equip',this)">Equipo</button>
+            <button class="tab-btn" onclick="switchTab('inv','consumibles',this)">Consumibles</button>
+            <button class="tab-btn" onclick="switchTab('inv','scrolls',this)">Pergaminos</button>
+          </div>
+          <div id="inv-tab-equip" class="tab-content active">
+            <div class="grid-items" id="inv-equip-grid"><div class="empty-state" style="grid-column:1/-1"><span class="empty-icon">🎒</span><p>Sin equipo</p></div></div>
+          </div>
+          <div id="inv-tab-consumibles" class="tab-content">
+            <div class="grid-items" id="inv-consumibles-grid"><div class="empty-state" style="grid-column:1/-1"><span class="empty-icon">🧪</span><p>Sin consumibles</p></div></div>
+          </div>
+          <div id="inv-tab-scrolls" class="tab-content">
+            <div class="grid-items" id="inv-scrolls-grid"><div class="empty-state" style="grid-column:1/-1"><span class="empty-icon">📜</span><p>Sin pergaminos</p></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAGIA -->
+    <section id="player-magia" class="player-section fade-in">
+      <div class="section-title"><h2>✨ Pergaminos Equipados</h2><div class="title-line"></div></div>
+      <p style="font-size:0.85rem;color:var(--text-dim);font-style:italic;margin-bottom:20px">Los pergaminos equipados no pueden desequiparse. Solo pueden usarse o tirarse.</p>
+      <div class="grid-items" id="magic-slots-grid">
+        <div class="empty-state" style="grid-column:1/-1"><span class="empty-icon">✨</span><p>No tienes pergaminos equipados</p></div>
+      </div>
+    </section>
+
+    <!-- TIENDA -->
+    <section id="player-tienda" class="player-section fade-in">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('tienda','cofres',this)">⚰ Cofres</button>
+        <button class="tab-btn" onclick="switchTab('tienda','bazar',this)">🏪 Bazar</button>
+      </div>
+      <div id="tienda-tab-cofres" class="tab-content active">
+        <p style="font-size:0.85rem;color:var(--text-dim);font-style:italic;margin-bottom:16px">Compra un cofre y elige entre 3 objetos generados al azar.</p>
+        <div class="grid-4" id="chest-shop-grid"></div>
+        <div id="chest-open-area" style="display:none;margin-top:24px">
+          <div class="section-title"><h3 id="chest-open-title">Elige un objeto</h3><div class="title-line"></div></div>
+          <div class="grid-3" id="chest-choice-grid"></div>
+          <div class="text-center mt-16">
+            <button class="btn btn-gold btn-lg" id="btn-claim" onclick="claimChestItem()" disabled>✔ Reclamar seleccionado</button>
+          </div>
+        </div>
+      </div>
+      <div id="tienda-tab-bazar" class="tab-content">
+        <div class="grid-items" id="bazar-player-grid">
+          <div class="empty-state" style="grid-column:1/-1"><span class="empty-icon">🏪</span><p>El bazar está vacío</p></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ============================================================
+     MODALES
+     ============================================================ -->
+
+<!-- Modal crear jugador -->
+<div id="modal-create-player" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header"><h3>👤 Crear Jugador</h3><button class="modal-close" onclick="closeModal('modal-create-player')">✕</button></div>
+    <div class="form-group"><label>Nombre del personaje</label><input type="text" id="new-player-name" placeholder="Ej: Arindel el Guardián"></div>
+    <div class="form-group"><label>Contraseña inicial (opcional)</label><input type="password" id="new-player-pass" placeholder="El jugador la cambiará la primera vez"></div>
+    <div class="form-group"><label>Monedas iniciales</label><input type="number" id="new-player-coins" value="100" min="0"></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-create-player')">Cancelar</button>
+      <button class="btn btn-gold" onclick="createPlayer()">✚ Crear</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal crear enemigo manual -->
+<div id="modal-create-enemy" class="modal-overlay">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-header"><h3>💀 Crear Enemigo</h3><button class="modal-close" onclick="closeModal('modal-create-enemy')">✕</button></div>
+    <div class="grid-2">
+      <div class="form-group"><label>Nombre</label><input type="text" id="enemy-name" placeholder="Orco Berserker"></div>
+      <div class="form-group"><label>Vida</label><input type="number" id="enemy-hp" value="30" min="1"></div>
+      <div class="form-group"><label>Armadura</label><input type="number" id="enemy-armor" value="10" min="0"></div>
+      <div class="form-group"><label>Reducción de Daño</label><input type="number" id="enemy-dr" value="0" min="0"></div>
+      <div class="form-group"><label>Movimiento (m)</label><input type="number" id="enemy-move" value="9" min="0"></div>
+      <div class="form-group"><label>Ataque</label><input type="number" id="enemy-atk" value="5" min="0"></div>
+      <div class="form-group"><label>Dado de Golpe</label><input type="text" id="enemy-dice" placeholder="1D8"></div>
+      <div class="form-group"><label>Daño</label><input type="number" id="enemy-dmg" value="5" min="0"></div>
+      <div class="form-group"><label>Salvación</label><input type="number" id="enemy-save" value="12" min="0"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-create-enemy')">Cancelar</button>
+      <button class="btn btn-danger" onclick="createManualEnemy()">✚ Crear</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal confirmar -->
+<div id="modal-confirm" class="modal-overlay">
+  <div class="modal" style="max-width:380px">
+    <div class="modal-header"><h3 id="confirm-title">¿Confirmar?</h3><button class="modal-close" onclick="closeModal('modal-confirm')">✕</button></div>
+    <p id="confirm-msg" style="margin-bottom:0"></p>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-confirm')">Cancelar</button>
+      <button class="btn btn-danger" id="confirm-ok-btn">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal editar monedas -->
+<div id="modal-edit-coins" class="modal-overlay">
+  <div class="modal" style="max-width:360px">
+    <div class="modal-header"><h3>🪙 Modificar Monedas</h3><button class="modal-close" onclick="closeModal('modal-edit-coins')">✕</button></div>
+    <p id="edit-coins-name" style="color:var(--text-mid);margin-bottom:14px"></p>
+    <div class="form-group"><label>Nuevo total</label><input type="number" id="edit-coins-value" value="0" min="0"></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-edit-coins')">Cancelar</button>
+      <button class="btn btn-gold" onclick="savePlayerCoins()">💾 Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal resetear contraseña -->
+<div id="modal-reset-pass" class="modal-overlay">
+  <div class="modal" style="max-width:360px">
+    <div class="modal-header"><h3>🔑 Resetear Contraseña</h3><button class="modal-close" onclick="closeModal('modal-reset-pass')">✕</button></div>
+    <p id="reset-pass-name" style="color:var(--text-mid);margin-bottom:14px"></p>
+    <div class="form-group"><label>Nueva contraseña</label><input type="password" id="reset-pass-value" placeholder="••••••••"></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-reset-pass')">Cancelar</button>
+      <button class="btn btn-primary" onclick="savePlayerPassword()">🔑 Resetear</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal personalizar panel -->
+<div id="modal-custom-panel" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header"><h3>✎ Personalizar Panel</h3><button class="modal-close" onclick="closeModal('modal-custom-panel')">✕</button></div>
+    <p style="font-size:0.85rem;color:var(--text-dim);font-style:italic;margin-bottom:16px">Elige las estadísticas que quieras mostrar en tu inicio.</p>
+    <div id="custom-panel-options" class="grid-2" style="max-height:300px;overflow-y:auto"></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-custom-panel')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveCustomPanel()">💾 Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal precio bazar -->
+<div id="modal-bazar-price" class="modal-overlay">
+  <div class="modal" style="max-width:360px">
+    <div class="modal-header"><h3>🏪 Enviar al Bazar</h3><button class="modal-close" onclick="closeModal('modal-bazar-price')">✕</button></div>
+    <p id="bazar-price-item-name" style="color:var(--text-mid);margin-bottom:14px"></p>
+    <div class="form-group"><label>Precio de venta (monedas)</label><input type="number" id="bazar-price-value" value="0" min="0"></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-bazar-price')">Cancelar</button>
+      <button class="btn btn-gold" onclick="confirmSendToBazar()">→ Enviar al Bazar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     FIREBASE SDK
+     ============================================================ -->
+<script type="module">
+  // ============================================================
+  // 🔥 PEGA AQUÍ TU CONFIGURACIÓN DE FIREBASE
+  // Consola Firebase → Tu proyecto → Configuración → SDK
+  // ============================================================
+  const firebaseConfig = {
+    apiKey: "AIzaSyAsXh56E-AgQfY8_qCkNjIOs4eSSq5yAE0",
+  authDomain: "cronicas-del-abismo-e624c.firebaseapp.com",
+  databaseURL: "https://cronicas-del-abismo-e624c-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "cronicas-del-abismo-e624c",
+  storageBucket: "cronicas-del-abismo-e624c.firebasestorage.app",
+  messagingSenderId: "52132924502",
+  appId: "1:52132924502:web:a5b70ce19cea279b2e7ff7"
+  };
+  // ============================================================
+
+  import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, doc, getDoc, setDoc, deleteDoc,
+           collection, getDocs, onSnapshot }
+           from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
+  window._db          = db;
+  window._fsDoc       = doc;
+  window._fsGetDoc    = getDoc;
+  window._fsSetDoc    = setDoc;
+  window._fsDeleteDoc = deleteDoc;
+  window._fsColl      = collection;
+  window._fsGetDocs   = getDocs;
+  window._fsOnSnapshot= onSnapshot;
+
+  window.dispatchEvent(new Event('firebase-ready'));
+</script>
+
+<!-- ============================================================
+     LÓGICA JS — PEGAR BLOQUE 2 AQUÍ
+     ============================================================ -->
+<script>
+'use strict';
+// ============================================================
+// ESTADO GLOBAL
+// ============================================================
+const APP = {
+  masterPassword: 'master123',
+  currentScreen: 'login',
+  currentPlayer: null,
+  firebaseReady: false,
+  players: {},
+  items: [],
+  bazar: [],
+  enemies: [],
+  scrolls: [],
+  chestConfig: {
+    basico:         { price: 50,   minVal: 10,  maxVal: 50  },
+    bueno:          { price: 150,  minVal: 51,  maxVal: 150 },
+    extraordinario: { price: 400,  minVal: 151, maxVal: 400 },
+    legendario:     { price: 1000, minVal: 401, maxVal: 999 },
+  },
+  chestBias: 0,
+  dictionary: {},
+};
+
+// ============================================================
+// CONSTANTES DE JUEGO
+// ============================================================
+const ATTRS        = ['Fuerza','Destreza','Constitucion','Inteligencia','Sabiduria','Carisma'];
+const COMBAT_STATS = ['Vida','Armadura','Reduccion de Daño','Ataque','Dado de Golpe','Daño','Iniciativa','Fortaleza','Reflejos','Voluntad','Movimiento'];
+const SKILLS       = ['Acrobacias','Arcano','Atletismo','Engaño','Historia','Interpretación','Intimidación','Investigación','Juego de Manos','Medicina','Naturaleza','Percepción','Perspicacia','Persuasión','Religión','Sigilo','Supervivencia','Trato de Animales'];
+const ALL_STATS    = [...ATTRS, ...COMBAT_STATS, ...SKILLS];
+
+const STAT_SOURCE = {
+  'Vida':'Constitucion','Ataque':'Destreza','Daño':'Fuerza',
+  'Iniciativa':'Destreza','Fortaleza':'Constitucion','Reflejos':'Destreza','Voluntad':'Sabiduria',
+  'Acrobacias':'Destreza','Arcano':'Inteligencia','Atletismo':'Fuerza','Engaño':'Carisma',
+  'Historia':'Inteligencia','Interpretación':'Carisma','Intimidación':'Carisma',
+  'Investigación':'Inteligencia','Juego de Manos':'Destreza','Medicina':'Sabiduria',
+  'Naturaleza':'Inteligencia','Percepción':'Sabiduria','Perspicacia':'Sabiduria',
+  'Persuasión':'Carisma','Religión':'Inteligencia','Sigilo':'Destreza',
+  'Supervivencia':'Sabiduria','Trato de Animales':'Sabiduria',
+};
+const NO_MOD_STATS = ['Armadura','Reduccion de Daño','Dado de Golpe','Movimiento'];
+
+const WEAPON_TYPES  = ['Daga','Espada Corta','Espada Larga','Espadón','Hacha Corta','Hacha de Guerra','Maza','Maza de Guerra','Lanza','Guja','Martillo','Martillo de Guerra'];
+const WEAPON_HANDS  = {Daga:1,'Espada Corta':1,'Espada Larga':1,'Espadón':2,'Hacha Corta':1,'Hacha de Guerra':2,'Maza':1,'Maza de Guerra':2,'Lanza':1,'Guja':2,'Martillo':1,'Martillo de Guerra':2};
+const RANGED_WEAPONS= [{name:'Arco',range:50},{name:'Arco Largo',range:100},{name:'Ballesta',range:50},{name:'Ballesta Pesada',range:100}];
+const SHIELD_TYPES  = ['Rodela','Escudo','Escudo Grande','Pavés'];
+const HELM_TYPES    = ['Gorro','Sombrero','Casco','Bandana'];
+const ARMOR_TYPES   = ['Ropa','Armadura Ligera','Armadura Media','Armadura Pesada','Armadura Completa'];
+const ACCESSORY_TYPES = ['Anillo','Collar','Brazal','Guantes','Botas','Cinturón','Joya'];
+
+const UTILITY_ITEMS = [
+  'Cuerda de cáñamo (15m)','Saco de dormir','Cantimplora','Raciones de viaje','Antorchas',
+  'Pedernal y acero','Manta de invierno','Saco vacío','Odre de vino','Caja de raciones de hierro',
+  'Espejo de acero pequeño','Abrojos','Aceite (frasco)','Ácido (vial)','Agua bendita',
+  'Cerradura y llave','Cesta de mimbre','Cofre pequeño de madera','Cuerda de seda','Catalejo',
+  'Escalera de cuerda','Estacas de madera','Mazo de madera','Garfio de escalada',
+  'Herramientas de ladrón','Incienso','Jabón','Juego de dados','Juego de cartas',
+  'Lámpara de aceite','Diario de viaje','Linterna de ojo de buey','Lupa de cristal',
+  'Mapa de la región','Martillo pequeño','Munición para honda','Tubo para pergaminos',
+  'Pala de hierro','Papel (hojas)','Pértiga (3 metros)','Pergamino','Pico de minero',
+  'Pluma y tinta','Polvos de tiza','Ropa de viaje de repuesto','Símbolo sagrado',
+  'Silbato de señales','Velas de cera'
+];
+const UTILITY_DESCS = {
+  'Cuerda de cáñamo (15m)':'Útil para escalar, atar o tender trampas.',
+  'Saco de dormir':'Permite descansar cómodamente en exteriores.',
+  'Cantimplora':'Contiene agua para el viaje.',
+  'Raciones de viaje':'Comida seca para 1 día de viaje.',
+  'Antorchas':'Proporcionan luz durante 1 hora.',
+  'Pedernal y acero':'Para encender fuego sin magia.',
+  'Manta de invierno':'Protege del frío extremo.',
+  'Saco vacío':'Contenedor básico de lona.',
+  'Odre de vino':'Contiene vino para el viaje.',
+  'Caja de raciones de hierro':'Raciones selladas para 3 días.',
+  'Espejo de acero pequeño':'Para señalizar o ver sin exponerse.',
+  'Abrojos':'Se esparcen en el suelo. Dificultan el avance.',
+  'Aceite (frasco)':'Arde 1 hora o sirve para lubricar.',
+  'Ácido (vial)':'Corroe metal y carne. 1D6 de daño.',
+  'Agua bendita':'Daña a no-muertos y criaturas malignas.',
+  'Cerradura y llave':'Cerradura de calidad con su llave.',
+  'Cesta de mimbre':'Contenedor flexible y ligero.',
+  'Cofre pequeño de madera':'Para guardar objetos valiosos.',
+  'Cuerda de seda':'Resistente y ligera. 15 metros.',
+  'Catalejo':'Permite ver a larga distancia.',
+  'Escalera de cuerda':'10 metros de escalera portátil.',
+  'Estacas de madera':'Para acampar o combatir no-muertos.',
+  'Mazo de madera':'Para clavar estacas o golpear.',
+  'Garfio de escalada':'Se lanza y ancla para escalar.',
+  'Herramientas de ladrón':'Para abrir cerraduras y desactivar trampas.',
+  'Incienso':'Para rituales o enmascarar olores.',
+  'Jabón':'Higiene básica del aventurero.',
+  'Juego de dados':'Para juegos de azar.',
+  'Juego de cartas':'Mazo de cartas estándar.',
+  'Lámpara de aceite':'Ilumina más que una antorcha.',
+  'Diario de viaje':'Para apuntar notas y secretos.',
+  'Linterna de ojo de buey':'Luz concentrada y direccional.',
+  'Lupa de cristal':'Para examinar detalles pequeños.',
+  'Mapa de la región':'Mapa básico de la zona.',
+  'Martillo pequeño':'Para clavar o pequeñas reparaciones.',
+  'Munición para honda':'20 proyectiles de piedra.',
+  'Tubo para pergaminos':'Protege pergaminos del agua.',
+  'Pala de hierro':'Para cavar y remover tierra.',
+  'Papel (hojas)':'10 hojas en blanco.',
+  'Pértiga (3 metros)':'Vara larga para explorar.',
+  'Pergamino':'Hoja de pergamino en blanco.',
+  'Pico de minero':'Para picar roca y minerales.',
+  'Pluma y tinta':'Para escribir y dibujar.',
+  'Polvos de tiza':'Para marcar superficies.',
+  'Ropa de viaje de repuesto':'Muda de ropa práctica.',
+  'Símbolo sagrado':'Emblema de deidad para rituales.',
+  'Silbato de señales':'Para comunicarse a distancia.',
+  'Velas de cera':'Iluminación suave. Duran 4 horas.',
+};
+
+const DICE_TYPES  = [4,6,8,10,12,20];
+const RARITY_TABLE = [
+  {name:'Común',        key:'common',    max:10},
+  {name:'Raro',         key:'rare',      max:20},
+  {name:'Gran Calidad', key:'great',     max:35},
+  {name:'Extraordinario',key:'extra',   max:60},
+  {name:'Legendario',   key:'legendary', max:90},
+  {name:'Único',        key:'unique',    max:Infinity},
+];
+const EQUIP_SLOTS = [
+  {id:'mano',      label:'Mano',       icon:'⚔️', types:['arma','arma_dist']},
+  {id:'auxiliar',  label:'Auxiliar',   icon:'🛡', types:['escudo','arma']},
+  {id:'cabeza',    label:'Cabeza',     icon:'⛑', types:['yelmo']},
+  {id:'torso',     label:'Torso',      icon:'🥋', types:['armadura']},
+  {id:'accesorio1',label:'Accesorio 1',icon:'💍', types:['accesorio']},
+  {id:'accesorio2',label:'Accesorio 2',icon:'💍', types:['accesorio']},
+  {id:'accesorio3',label:'Accesorio 3',icon:'💍', types:['accesorio']},
+];
+const DICT_TYPES = [
+  {key:'arma',      label:'⚔️ Armas'},
+  {key:'arma_dist', label:'🏹 Armas a Distancia'},
+  {key:'escudo',    label:'🛡 Escudos'},
+  {key:'yelmo',     label:'⛑ Yelmos'},
+  {key:'armadura',  label:'🥋 Armaduras'},
+  {key:'accesorio', label:'💍 Accesorios'},
+];
+
+// ============================================================
+// HELPERS MATEMÁTICOS
+// ============================================================
+function floorMod(attr){ return Math.floor((attr-10)/2); }
+function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+function randFrom(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function generateId(){ return Date.now().toString(36)+Math.random().toString(36).substr(2,5); }
+function diceMean(num,sides){ return num*(sides+1)/2; }
+
+function getRarity(value){
+  const v = Math.round(value/5);
+  for(const r of RARITY_TABLE){ if(v<=r.max) return r; }
+  return RARITY_TABLE[RARITY_TABLE.length-1];
+}
+
+function closestDice(targetMean){
+  let best={num:1,sides:4,mean:diceMean(1,4)};
+  let bestDiff=Math.abs(targetMean-best.mean);
+  for(const sides of DICE_TYPES){
+    for(let num=1;num<=10;num++){
+      const m=diceMean(num,sides);
+      const diff=Math.abs(targetMean-m);
+      if(diff<bestDiff){bestDiff=diff;best={num,sides,mean:m};}
+      if(m>targetMean*2.5) break;
+    }
+  }
+  return best;
+}
+function diceStr(num,sides){ return `${num}D${sides}`; }
+
+function generateBalanced(numStats, total){
+  if(numStats===0) return [];
+  const base=Math.round(total/numStats);
+  const maxDiff=Math.max(1,Math.round(base*0.3));
+  const result=[];
+  let remaining=total;
+  for(let i=0;i<numStats-1;i++){
+    const lo=Math.max(1,base-maxDiff);
+    const hi=base+maxDiff;
+    const v=randInt(lo,hi);
+    result.push(v);
+    remaining-=v;
+  }
+  result.push(Math.max(1,remaining));
+  return result;
+}
+
+function getDictEntry(typeKey, field){
+  const d=APP.dictionary[typeKey];
+  if(!d||!d[field]||d[field].length===0) return '-';
+  return randFrom(d[field]);
+}
+
+// ============================================================
+// NAVEGACIÓN
+// ============================================================
+function showScreen(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el=document.getElementById('screen-'+name);
+  if(el) el.classList.add('active');
+  APP.currentScreen=name;
+  if(name==='player-select') renderPlayerSelectList();
+}
+
+function showMasterSection(name, btn){
+  document.querySelectorAll('.master-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.master-nav-btn').forEach(b=>b.classList.remove('active'));
+  const sec=document.getElementById('master-'+name);
+  if(sec) sec.classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(name==='bonificadores') initBonusPanel();
+  if(name==='diccionario')   renderDictionary();
+  if(name==='creacion')      initCreacionSection();
+  if(name==='pergaminos')    renderMasterScrolls();
+  if(name==='enemigos')      renderEnemies();
+}
+
+function showPlayerSection(name, btn){
+  document.querySelectorAll('.player-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.player-nav-btn').forEach(b=>b.classList.remove('active'));
+  const sec=document.getElementById('player-'+name);
+  if(sec) sec.classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(name==='inicio')  renderPlayerHome();
+  if(name==='ficha')   renderPlayerFicha();
+  if(name==='equipo')  renderEquipScreen();
+  if(name==='magia')   renderMagicScreen();
+  if(name==='tienda')  renderShopScreen();
+}
+
+function switchTab(group, tab, btn){
+  document.querySelectorAll(`[id^="${group}-tab-"]`).forEach(el=>el.classList.remove('active'));
+  if(btn) btn.closest('.tabs').querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  const t=document.getElementById(`${group}-tab-${tab}`);
+  if(t) t.classList.add('active');
+  if(btn) btn.classList.add('active');
+}
+
+// ============================================================
+// MODALES
+// ============================================================
+function openModal(id){
+  const m=document.getElementById(id);
+  if(m) m.classList.add('open');
+}
+function closeModal(id){
+  const m=document.getElementById(id);
+  if(m) m.classList.remove('open');
+}
+document.querySelectorAll('.modal-overlay').forEach(o=>{
+  o.addEventListener('click',e=>{ if(e.target===o) o.classList.remove('open'); });
+});
+
+// ============================================================
+// TOASTS
+// ============================================================
+function showToast(msg, type='info', duration=3000){
+  const c=document.getElementById('toast-container');
+  const t=document.createElement('div');
+  t.className=`toast ${type}`;
+  t.textContent=msg;
+  c.appendChild(t);
+  setTimeout(()=>{
+    t.style.opacity='0';
+    t.style.transform='translateX(20px)';
+    t.style.transition='all 0.3s ease';
+    setTimeout(()=>t.remove(),300);
+  },duration);
+}
+
+// ============================================================
+// RENDER TARJETA DE OBJETO
+// ============================================================
+function renderItemCard(item){
+  const rarity=RARITY_TABLE.find(r=>r.key===item.rarity)||RARITY_TABLE[0];
+  const statsHtml=Object.entries(item.stats||{}).map(([k,v])=>{
+    let dv=v;
+    if(k==='Reduccion de Daño') dv=Math.round((parseInt(v)||0)/10);
+    return `<div class="item-stat">${k}: <span>${dv}</span></div>`;
+  }).join('');
+  return `
+    <div class="item-type">${item.subtype||item.type}</div>
+    <div class="item-name">${item.name||'-'}</div>
+    <div class="item-quality">${item.quality||'-'}</div>
+    <div style="margin:5px 0"><span class="badge badge-${item.rarity}">${rarity.name}</span></div>
+    <div class="item-stats">${statsHtml}</div>
+    ${item.description?`<div style="font-size:0.8rem;color:var(--text-dim);font-style:italic;margin-top:6px">${item.description}</div>`:''}
+    <div class="item-value">🪙 <span>${item.value||0}</span></div>
+  `;
+}
+
+// ============================================================
+// CÁLCULO DE STATS DEL JUGADOR
+// ============================================================
+function attrMod(player, attrName){
+  return Math.floor(((player.attrs?.[attrName]||10)-10)/2);
+}
+
+function getAutoStat(player, statName){
+  const p=player;
+  let base=0;
+  if(ATTRS.includes(statName)){
+    base=p.attrs?.[statName]||10;
+  } else if(statName==='Vida'){
+    base=10+(p.attrs?.Constitucion||10);
+  } else if(statName==='Movimiento'){
+    base=9;
+  } else if(statName==='Dado de Golpe'){
+    return null; // especial
+  }
+  let modBonus=0;
+  const src=STAT_SOURCE[statName];
+  if(src && !NO_MOD_STATS.includes(statName)){
+    modBonus=attrMod(p,src);
+  }
+  const masterBonus=p.masterBonus?.[statName]||0;
+  let equipBonus=0;
+  Object.values(p.equipped||{}).forEach(item=>{
+    if(!item) return;
+    const v=item.stats?.[statName];
+    if(v!==undefined && typeof v==='number'){
+      equipBonus+=(statName==='Reduccion de Daño')?Math.round(v/10):v;
+    }
+  });
+  return base+modBonus+masterBonus+equipBonus;
+}
+
+function getTotalStat(player, statName){
+  if(statName==='Dado de Golpe'){
+    const w=Object.values(player.equipped||{}).find(i=>i&&(i.type==='arma'||i.type==='arma_dist'));
+    return w?.stats?.['Dado de Golpe']||'—';
+  }
+  const auto=getAutoStat(player,statName);
+  const manual=player.manualStats?.[statName]||0;
+  return auto+manual;
+}
+
+function getMaxHP(player){
+  return getAutoStat(player,'Vida')+(player.manualStats?.['Vida']||0);
+}
+
+// ============================================================
+// FIREBASE HELPERS
+// ============================================================
+function fbSavePlayer(id){
+  const p=APP.players[id];
+  if(!p) return;
+  if(window._db){
+    try{ window._fsSetDoc(window._fsDoc(window._db,'players',id),p).catch(e=>console.warn(e)); }catch(e){}
+  }
+  localStorage.setItem('rol_players',JSON.stringify(APP.players));
+}
+function fbDeletePlayer(id){
+  if(window._db){
+    try{ window._fsDeleteDoc(window._fsDoc(window._db,'players',id)).catch(e=>console.warn(e)); }catch(e){}
+  }
+  localStorage.setItem('rol_players',JSON.stringify(APP.players));
+}
+function fbSaveGameDoc(docName, data){
+  if(window._db){
+    try{ window._fsSetDoc(window._fsDoc(window._db,'game',docName),data).catch(e=>console.warn(e)); }catch(e){}
+  }
+  localStorage.setItem('rol_'+docName,JSON.stringify(data));
+}
+function fbSaveEnemies(){ fbSaveGameDoc('enemies',{list:APP.enemies}); }
+function fbSaveScrolls(){ fbSaveGameDoc('scrolls',{list:APP.scrolls}); }
+function fbSaveBazar(){   fbSaveGameDoc('bazar',{list:APP.bazar}); }
+function fbSaveDict(){    fbSaveGameDoc('dictionary',APP.dictionary); }
+function fbSaveConfig(){  fbSaveGameDoc('config',{chestConfig:APP.chestConfig,chestBias:APP.chestBias}); }
+
+// ============================================================
+// CARGA DE DATOS
+// ============================================================
+function loadFromLocalStorage(){
+  try{
+    const pl=localStorage.getItem('rol_players');       if(pl) APP.players=JSON.parse(pl);
+    const en=localStorage.getItem('rol_enemies');       if(en) APP.enemies=JSON.parse(en).list||JSON.parse(en);
+    const sc=localStorage.getItem('rol_scrolls');       if(sc) APP.scrolls=JSON.parse(sc).list||JSON.parse(sc);
+    const bz=localStorage.getItem('rol_bazar');         if(bz) APP.bazar=JSON.parse(bz).list||JSON.parse(bz);
+    const dc=localStorage.getItem('rol_dictionary');    if(dc) APP.dictionary=JSON.parse(dc);
+    const cf=localStorage.getItem('rol_config');
+    if(cf){ const c=JSON.parse(cf); if(c.chestConfig) APP.chestConfig=c.chestConfig; if(c.chestBias!==undefined) APP.chestBias=c.chestBias; }
+  }catch(e){ console.warn('Error cargando localStorage:',e); }
+}
+
+async function loadFromFirebase(){
+  if(!window._db) return;
+  try{
+    const snap=await window._fsGetDocs(window._fsColl(window._db,'players'));
+    snap.forEach(d=>{ APP.players[d.id]={...d.data(),id:d.id}; });
+    for(const key of ['enemies','scrolls','bazar','dictionary','config']){
+      const s=await window._fsGetDoc(window._fsDoc(window._db,'game',key));
+      if(!s.exists()) continue;
+      const data=s.data();
+      if(key==='enemies')    APP.enemies=data.list||[];
+      if(key==='scrolls')    APP.scrolls=data.list||[];
+      if(key==='bazar')      APP.bazar=data.list||[];
+      if(key==='dictionary') APP.dictionary=data;
+      if(key==='config'){
+        if(data.chestConfig) APP.chestConfig=data.chestConfig;
+        if(data.chestBias!==undefined) APP.chestBias=data.chestBias;
+      }
+    }
+    console.log('✅ Firebase cargado');
+  }catch(e){ console.warn('Firebase error:',e); }
+}
+
+// ============================================================
+// LOGIN MASTER
+// ============================================================
+function doMasterLogin(){
+  const pw=document.getElementById('master-password-input').value;
+  const err=document.getElementById('master-auth-error');
+  if(pw===APP.masterPassword){
+    err.classList.remove('show');
+    document.getElementById('master-password-input').value='';
+    showScreen('master');
+    initMasterPanel();
+    showToast('Bienvenido, Maestro 👑','gold');
+  } else {
+    err.classList.add('show');
+    document.getElementById('master-password-input').value='';
+  }
+}
+function exitMaster(){ showScreen('login'); }
+
+function initMasterPanel(){
+  renderPlayersTable();
+  updateBonusTargetSelect();
+  initCreacionSection();
+}
+
+// ============================================================
+// SELECCIÓN Y LOGIN DE JUGADOR
+// ============================================================
+let selectedPlayerId=null;
+
+function renderPlayerSelectList(){
+  const list=document.getElementById('player-select-list');
+  const players=Object.values(APP.players);
+  if(players.length===0){
+    list.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><span class="empty-icon">👤</span><p>No hay personajes creados.<br>El Maestro debe crear jugadores primero.</p></div>`;
+    return;
+  }
+  list.innerHTML=players.map(p=>`
+    <div class="player-avatar-btn" onclick="selectPlayer('${p.id}')">
+      <span class="avatar-icon">⚔️</span>
+      <div class="player-name">${p.name}</div>
+      <div class="player-coins">🪙 ${p.coins||0}</div>
+    </div>
+  `).join('');
+}
+
+function selectPlayer(id){
+  const p=APP.players[id];
+  if(!p) return;
+  selectedPlayerId=id;
+  document.getElementById('player-login-name').textContent='⚔️ '+p.name;
+  document.getElementById('player-auth-error').classList.remove('show');
+  document.getElementById('player-password-input').value='';
+  document.getElementById('player-password-confirm').value='';
+  if(!p.password){
+    document.getElementById('player-login-subtitle').textContent='Primera vez aquí. Crea tu contraseña.';
+    document.getElementById('player-password-label').textContent='Nueva contraseña';
+    document.getElementById('player-confirm-group').style.display='';
+    document.getElementById('player-login-btn').textContent='Crear contraseña y entrar';
+  } else {
+    document.getElementById('player-login-subtitle').textContent='Introduce tu contraseña.';
+    document.getElementById('player-password-label').textContent='Contraseña';
+    document.getElementById('player-confirm-group').style.display='none';
+    document.getElementById('player-login-btn').textContent='Entrar';
+  }
+  showScreen('player-login');
+}
+
+function doPlayerLogin(){
+  const p=APP.players[selectedPlayerId];
+  if(!p) return;
+  const pw=document.getElementById('player-password-input').value;
+  const cf=document.getElementById('player-password-confirm').value;
+  const err=document.getElementById('player-auth-error');
+  if(!p.password){
+    if(pw.length<4){ err.textContent='Mínimo 4 caracteres'; err.classList.add('show'); return; }
+    if(pw!==cf){ err.textContent='Las contraseñas no coinciden'; err.classList.add('show'); return; }
+    p.password=pw;
+    fbSavePlayer(selectedPlayerId);
+  } else {
+    if(pw!==p.password){ err.textContent='Contraseña incorrecta'; err.classList.add('show'); document.getElementById('player-password-input').value=''; return; }
+  }
+  err.classList.remove('show');
+  APP.currentPlayer=p;
+  document.getElementById('player-password-input').value='';
+  document.getElementById('player-password-confirm').value='';
+  showScreen('player');
+  initPlayerPanel();
+  showToast(`¡Bienvenido, ${p.name}! ⚔️`,'info');
+}
+
+function exitPlayer(){
+  APP.currentPlayer=null;
+  selectedPlayerId=null;
+  showScreen('login');
+}
+
+// ============================================================
+// MASTER: USUARIOS
+// ============================================================
+function createPlayer(){
+  const name=document.getElementById('new-player-name').value.trim();
+  const pass=document.getElementById('new-player-pass').value;
+  const coins=parseInt(document.getElementById('new-player-coins').value)||100;
+  if(!name){ showToast('Introduce un nombre','error'); return; }
+  const id=generateId();
+  const player={
+    id,name,coins,password:pass||null,
+    hp:null,
+    attrs:{Fuerza:10,Destreza:10,Constitucion:10,Inteligencia:10,Sabiduria:10,Carisma:10},
+    manualStats:{}, masterBonus:{},
+    equipped:{}, inventory:[], magicSlots:[],
+    customPanel:['Fuerza','Destreza','Vida','Armadura'],
+  };
+  player.hp=getMaxHP(player);
+  APP.players[id]=player;
+  fbSavePlayer(id);
+  renderPlayersTable();
+  updateBonusTargetSelect();
+  closeModal('modal-create-player');
+  document.getElementById('new-player-name').value='';
+  document.getElementById('new-player-pass').value='';
+  document.getElementById('new-player-coins').value='100';
+  showToast(`Jugador "${name}" creado ✓`,'success');
+}
+
+function renderPlayersTable(){
+  const tb=document.getElementById('players-tbody');
+  const players=Object.values(APP.players);
+  if(players.length===0){
+    tb.innerHTML=`<tr><td colspan="5" class="text-center" style="padding:40px;color:var(--text-ghost);font-style:italic">No hay jugadores creados</td></tr>`;
+    return;
+  }
+  tb.innerHTML=players.map(p=>`
+    <tr>
+      <td><strong style="color:var(--text-bright)">${p.name}</strong></td>
+      <td><span style="font-size:0.78rem;color:${p.password?'var(--green)':'var(--text-dim)'}">${p.password?'● Activo':'○ Sin contraseña'}</span></td>
+      <td class="gold-value">${p.coins||0} 🪙</td>
+      <td><button class="btn btn-gold btn-sm" onclick="openEditCoinsModal('${p.id}')">✎ Modificar</button></td>
+      <td style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn btn-sm" onclick="openResetPassModal('${p.id}')">🔑 Resetear</button>
+        <button class="btn btn-danger btn-sm" onclick="confirmDeletePlayer('${p.id}')">🗑</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+let _editCoinsId=null, _resetPassId=null, _deletePlayerId=null;
+
+function openEditCoinsModal(id){
+  const p=APP.players[id]; if(!p) return;
+  _editCoinsId=id;
+  document.getElementById('edit-coins-name').textContent='Personaje: '+p.name;
+  document.getElementById('edit-coins-value').value=p.coins||0;
+  openModal('modal-edit-coins');
+}
+function savePlayerCoins(){
+  const p=APP.players[_editCoinsId]; if(!p) return;
+  p.coins=parseInt(document.getElementById('edit-coins-value').value)||0;
+  fbSavePlayer(_editCoinsId);
+  renderPlayersTable();
+  closeModal('modal-edit-coins');
+  if(APP.currentPlayer?.id===_editCoinsId) updatePlayerHeader();
+  showToast('Monedas actualizadas ✓','gold');
+}
+
+function openResetPassModal(id){
+  const p=APP.players[id]; if(!p) return;
+  _resetPassId=id;
+  document.getElementById('reset-pass-name').textContent='Personaje: '+p.name;
+  document.getElementById('reset-pass-value').value='';
+  openModal('modal-reset-pass');
+}
+function savePlayerPassword(){
+  const p=APP.players[_resetPassId]; if(!p) return;
+  const pw=document.getElementById('reset-pass-value').value;
+  if(pw.length<4){ showToast('Mínimo 4 caracteres','error'); return; }
+  p.password=pw;
+  fbSavePlayer(_resetPassId);
+  renderPlayersTable();
+  closeModal('modal-reset-pass');
+  showToast('Contraseña reseteada ✓','success');
+}
+
+function confirmDeletePlayer(id){
+  const p=APP.players[id]; if(!p) return;
+  _deletePlayerId=id;
+  document.getElementById('confirm-title').textContent='¿Eliminar jugador?';
+  document.getElementById('confirm-msg').textContent=`Se eliminará permanentemente a "${p.name}" y todos sus datos.`;
+  document.getElementById('confirm-ok-btn').onclick=doDeletePlayer;
+  openModal('modal-confirm');
+}
+function doDeletePlayer(){
+  if(!_deletePlayerId) return;
+  const name=APP.players[_deletePlayerId]?.name;
+  delete APP.players[_deletePlayerId];
+  fbDeletePlayer(_deletePlayerId);
+  renderPlayersTable();
+  updateBonusTargetSelect();
+  closeModal('modal-confirm');
+  showToast(`"${name}" eliminado`,'error');
+  _deletePlayerId=null;
+}
+
+// ============================================================
+// MASTER: BONIFICADORES
+// ============================================================
+const bonusVals={};
+
+function updateBonusTargetSelect(){
+  const sel=document.getElementById('bonus-target-select');
+  if(!sel) return;
+  const cur=sel.value;
+  sel.innerHTML=`<option value="all">— Todos los jugadores —</option>`+
+    Object.values(APP.players).map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+  if(cur) sel.value=cur;
+}
+
+function initBonusPanel(){
+  buildBonusBlock('bonus-attrs', ATTRS);
+  buildBonusBlock('bonus-combat', COMBAT_STATS.filter(s=>s!=='Dado de Golpe'));
+  buildBonusBlock('bonus-skills', SKILLS);
+}
+
+function buildBonusBlock(id, stats){
+  const el=document.getElementById(id); if(!el) return;
+  el.innerHTML=stats.map(s=>`
+    <div class="stat-cell">
+      <div class="stat-label">${s}</div>
+      <input type="number" value="${bonusVals[s]||0}"
+        style="width:65px;text-align:center;font-family:var(--font-mono);font-size:1rem;background:transparent;border:none;color:var(--text-bright)"
+        onchange="bonusVals['${s}']=parseInt(this.value)||0">
+    </div>
+  `).join('');
+}
+
+function saveBonuses(){
+  const targetId=document.getElementById('bonus-target-select').value;
+  const targets=targetId==='all'?Object.values(APP.players):[APP.players[targetId]].filter(Boolean);
+  targets.forEach(p=>{ p.masterBonus={...bonusVals}; fbSavePlayer(p.id); });
+  if(APP.currentPlayer){
+    const cp=APP.players[APP.currentPlayer.id];
+    if(cp){ APP.currentPlayer.masterBonus=cp.masterBonus; }
+  }
+  showToast(`Bonos aplicados a ${targets.length===1?targets[0].name:'todos'} ✓`,'gold');
+}
+
+function resetBonuses(){
+  Object.keys(bonusVals).forEach(k=>bonusVals[k]=0);
+  document.querySelectorAll('#bonus-attrs input,#bonus-combat input,#bonus-skills input').forEach(i=>i.value=0);
+  showToast('Bonificadores a 0','info');
+}
+
+// ============================================================
+// GENERACIÓN DE OBJETOS
+// ============================================================
+function generateItem(type, genValue){
+  const fns={
+    arma:      ()=>genWeapon(genValue,false),
+    arma_dist: ()=>genWeapon(genValue,true),
+    escudo:    ()=>genShield(genValue),
+    yelmo:     ()=>genHelm(genValue),
+    armadura:  ()=>genArmor(genValue),
+    accesorio: ()=>genAccessory(genValue),
+    utilidad:  ()=>genUtility(),
+    pocion:    ()=>({
+      id:generateId(),type:'pocion',subtype:'Poción',
+      name:'Poción de Curación',quality:'-',
+      heal:Math.max(5,Math.round(genValue*2)),
+      stats:{},value:Math.max(1,Math.round(genValue/5)),
+      rarity:getRarity(genValue).key,
+      description:`Restaura ${Math.max(5,Math.round(genValue*2))} puntos de vida.`,
+    }),
+  };
+  return fns[type]?fns[type]():null;
+}
+
+function genWeapon(genValue, ranged){
+  const perStat=genValue/3;
+  const diff=Math.max(1,Math.round(perStat*0.3));
+  const atk=Math.max(1,Math.round(perStat+randInt(-diff,diff)));
+  const dmg=Math.max(1,Math.round(perStat+randInt(-diff,diff)));
+  const diceTarget=Math.max(2.5,genValue-atk-dmg);
+  const dice=closestDice(diceTarget);
+  const typeKey=ranged?'arma_dist':'arma';
+  const subtype=ranged?randFrom(RANGED_WEAPONS).name:randFrom(WEAPON_TYPES);
+  const hands=ranged?2:(WEAPON_HANDS[subtype]||1);
+  const stats={'Ataque':atk,'Daño':dmg,'Dado de Golpe':diceStr(dice.num,dice.sides)};
+  const rawSum=atk+dmg+dice.mean;
+  const value=Math.round(rawSum*10);
+  const rarity=getRarity(value);
+  return {
+    id:generateId(),type:typeKey,subtype,hands,
+    ...(ranged?{range:RANGED_WEAPONS.find(r=>r.name===subtype)?.range||50}:{}),
+    name:getDictEntry(typeKey,'names'), quality:getDictEntry(typeKey,'qualities'),
+    stats, value, rarity:rarity.key,
+  };
+}
+
+function genShield(genValue){
+  const [a,v,dr]=generateBalanced(3,genValue);
+  const value=Math.round((a+v+dr)*10);
+  return {id:generateId(),type:'escudo',subtype:randFrom(SHIELD_TYPES),
+    name:getDictEntry('escudo','names'),quality:getDictEntry('escudo','qualities'),
+    stats:{Armadura:a,Vida:v,'Reduccion de Daño':dr},value,rarity:getRarity(value).key};
+}
+function genHelm(genValue){
+  const [f,r,v]=generateBalanced(3,genValue);
+  const value=Math.round((f+r+v)*10);
+  return {id:generateId(),type:'yelmo',subtype:randFrom(HELM_TYPES),
+    name:getDictEntry('yelmo','names'),quality:getDictEntry('yelmo','qualities'),
+    stats:{Fortaleza:f,Reflejos:r,Voluntad:v},value,rarity:getRarity(value).key};
+}
+function genArmor(genValue){
+  const [a,v,dr]=generateBalanced(3,genValue);
+  const value=Math.round((a+v+dr)*10);
+  return {id:generateId(),type:'armadura',subtype:randFrom(ARMOR_TYPES),
+    name:getDictEntry('armadura','names'),quality:getDictEntry('armadura','qualities'),
+    stats:{Armadura:a,Vida:v,'Reduccion de Daño':dr},value,rarity:getRarity(value).key};
+}
+function genAccessory(genValue){
+  const allStats=[...ATTRS,...COMBAT_STATS.filter(s=>!['Dado de Golpe','Movimiento'].includes(s)),...SKILLS];
+  const num=randInt(1,2);
+  const pool=[...allStats];
+  const chosen=[];
+  for(let i=0;i<num;i++){
+    const idx=randInt(0,pool.length-1);
+    chosen.push(pool.splice(idx,1)[0]);
+  }
+  const vals=generateBalanced(num,genValue);
+  const stats={};
+  chosen.forEach((s,i)=>stats[s]=vals[i]);
+  const rawSum=vals.reduce((a,b)=>a+b,0);
+  const value=Math.round(rawSum*10);
+  return {id:generateId(),type:'accesorio',subtype:randFrom(ACCESSORY_TYPES),
+    name:getDictEntry('accesorio','names'),quality:getDictEntry('accesorio','qualities'),
+    stats,value,rarity:getRarity(value).key};
+}
+function genUtility(){
+  const name=randFrom(UTILITY_ITEMS);
+  return {id:generateId(),type:'utilidad',subtype:name,name,quality:'-',
+    stats:{},description:UTILITY_DESCS[name]||'Objeto de uso general.',
+    value:randInt(1,10),rarity:'common'};
+}
+
+// ============================================================
+// MASTER: CREACIÓN
+// ============================================================
+function initCreacionSection(){
+  buildChestConfigForm();
+  updateManualForm();
+  renderCreatedItems();
+  renderBazarMaster();
+  const slider=document.getElementById('chest-bias');
+  if(slider){
+    slider.value=APP.chestBias;
+    document.getElementById('chest-bias-label').textContent=APP.chestBias;
+    slider.oninput=()=>{
+      APP.chestBias=parseInt(slider.value);
+      document.getElementById('chest-bias-label').textContent=(APP.chestBias>0?'+':'')+APP.chestBias;
+    };
+  }
+}
+
+function buildChestConfigForm(){
+  const c=document.getElementById('chest-config-form'); if(!c) return;
+  const chests=[
+    {key:'basico',label:'⚰ Básico',color:'var(--rarity-common)'},
+    {key:'bueno',label:'⚰ Bueno',color:'var(--rarity-rare)'},
+    {key:'extraordinario',label:'⚰ Extraordinario',color:'var(--rarity-extra)'},
+    {key:'legendario',label:'⚰ Legendario',color:'var(--rarity-legendary)'},
+  ];
+  c.innerHTML=chests.map(ch=>{
+    const cfg=APP.chestConfig[ch.key];
+    return `<div class="panel mb-8" style="border-color:${ch.color}30">
+      <div style="font-family:var(--font-title);font-size:0.78rem;color:${ch.color};margin-bottom:10px">${ch.label}</div>
+      <div class="grid-3">
+        <div class="form-group"><label>Precio 🪙</label><input type="number" id="chest-${ch.key}-price" value="${cfg.price}" min="0"></div>
+        <div class="form-group"><label>Val. mín.</label><input type="number" id="chest-${ch.key}-min" value="${cfg.minVal}" min="1"></div>
+        <div class="form-group"><label>Val. máx.</label><input type="number" id="chest-${ch.key}-max" value="${cfg.maxVal}" min="1"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function saveChestConfig(){
+  ['basico','bueno','extraordinario','legendario'].forEach(k=>{
+    APP.chestConfig[k]={
+      price:parseInt(document.getElementById(`chest-${k}-price`)?.value)||0,
+      minVal:parseInt(document.getElementById(`chest-${k}-min`)?.value)||1,
+      maxVal:parseInt(document.getElementById(`chest-${k}-max`)?.value)||100,
+    };
+  });
+  fbSaveConfig();
+  showToast('Configuración guardada ✓','gold');
+}
+
+const MANUAL_STATS={
+  arma:      ['Ataque','Daño','Dado de Golpe'],
+  arma_dist: ['Ataque','Daño','Dado de Golpe'],
+  escudo:    ['Armadura','Vida','Reduccion de Daño'],
+  yelmo:     ['Fortaleza','Reflejos','Voluntad'],
+  armadura:  ['Armadura','Vida','Reduccion de Daño'],
+};
+
+function updateManualForm(){
+  const type=document.getElementById('manual-obj-type')?.value;
+  const c=document.getElementById('manual-form-fields'); if(!c) return;
+  const subtypeOpts={
+    arma:WEAPON_TYPES,arma_dist:RANGED_WEAPONS.map(r=>r.name),
+    escudo:SHIELD_TYPES,yelmo:HELM_TYPES,armadura:ARMOR_TYPES,accesorio:ACCESSORY_TYPES,
+  };
+  const allStatsList=[...ATTRS,...COMBAT_STATS.filter(s=>!['Dado de Golpe','Movimiento'].includes(s)),...SKILLS];
+  const statsHtml=type==='accesorio'
+    ?`<div class="form-group"><label>Estadística 1</label>
+        <select id="m-acc-s1">${allStatsList.map(s=>`<option>${s}</option>`).join('')}</select></div>
+       <div class="form-group"><label>Valor 1</label><input type="number" id="m-acc-v1" value="5" min="0"></div>
+       <div class="form-group"><label>Estadística 2 (opcional)</label>
+        <select id="m-acc-s2"><option value="">— Ninguna —</option>${allStatsList.map(s=>`<option>${s}</option>`).join('')}</select></div>
+       <div class="form-group"><label>Valor 2</label><input type="number" id="m-acc-v2" value="0" min="0"></div>`
+    :(MANUAL_STATS[type]||[]).map(s=>{
+        if(s==='Dado de Golpe') return `<div class="form-group"><label>Dado de Golpe</label><input type="text" id="m-stat-Dado_de_Golpe" placeholder="1D8"></div>`;
+        if(s==='Reduccion de Daño') return `<div class="form-group"><label>Red. Daño <small>(÷10 al mostrar)</small></label><input type="number" id="m-stat-Reduccion_de_Daño" value="10" min="0"></div>`;
+        return `<div class="form-group"><label>${s}</label><input type="number" id="m-stat-${s.replace(/\s/g,'_')}" value="5" min="0"></div>`;
+      }).join('');
+  c.innerHTML=`
+    <div class="form-group"><label>Subtipo</label>
+      <select id="m-subtype">${(subtypeOpts[type]||[]).map(t=>`<option>${t}</option>`).join('')}</select>
+    </div>
+    <div class="form-group"><label>Nombre</label><input type="text" id="m-name" placeholder="Nombre del objeto"></div>
+    <div class="form-group"><label>Cualidad</label><input type="text" id="m-quality" placeholder="Cualidad"></div>
+    ${statsHtml}`;
+}
+
+function createManualItem(){
+  const type=document.getElementById('manual-obj-type').value;
+  const subtype=document.getElementById('m-subtype')?.value||'';
+  const name=document.getElementById('m-name')?.value||'-';
+  const quality=document.getElementById('m-quality')?.value||'-';
+  let stats={};
+  if(type==='accesorio'){
+    const s1=document.getElementById('m-acc-s1')?.value;
+    const v1=parseInt(document.getElementById('m-acc-v1')?.value)||0;
+    const s2=document.getElementById('m-acc-s2')?.value;
+    const v2=parseInt(document.getElementById('m-acc-v2')?.value)||0;
+    if(s1) stats[s1]=v1;
+    if(s2) stats[s2]=v2;
+  } else {
+    (MANUAL_STATS[type]||[]).forEach(s=>{
+      const key=s.replace(/\s/g,'_');
+      const el=document.getElementById(`m-stat-${key}`);
+      if(el) stats[s]=(s==='Dado de Golpe')?el.value:(parseInt(el.value)||0);
+    });
+  }
+  const rawSum=Object.entries(stats).reduce((acc,[k,v])=>{
+    if(k==='Dado de Golpe'){
+      const m=String(v).match(/(\d+)D(\d+)/i);
+      return acc+(m?diceMean(parseInt(m[1]),parseInt(m[2])):0);
+    }
+    return acc+(parseInt(v)||0);
+  },0);
+  const value=Math.round(rawSum*10);
+  const item={id:generateId(),type,subtype,name,quality,stats,value,rarity:getRarity(value).key};
+  APP.items.push(item);
+  renderCreatedItems();
+  showToast('Objeto creado ✓','success');
+}
+
+function generateRandomItem(){
+  const type=document.getElementById('gen-obj-type').value;
+  const value=parseInt(document.getElementById('gen-obj-value').value)||50;
+  const item=generateItem(type,value);
+  if(!item){ showToast('No se puede generar este tipo','error'); return; }
+  APP.items.push(item);
+  renderCreatedItems();
+  showToast('Objeto generado ✓','success');
+}
+
+function renderCreatedItems(){
+  const grid=document.getElementById('created-items-grid'); if(!grid) return;
+  if(APP.items.length===0){
+    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><span class="empty-icon">📦</span><p>Genera o crea objetos para verlos aquí</p></div>`;
+    return;
+  }
+  grid.innerHTML=APP.items.map(item=>`
+    <div class="item-card rarity-${item.rarity}">
+      ${renderItemCard(item)}
+      <div style="display:flex;gap:5px;margin-top:10px;flex-wrap:wrap">
+        <button class="btn btn-gold btn-sm" onclick="openBazarPriceModal('${item.id}')">→ Bazar</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteCreatedItem('${item.id}')">🗑</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function deleteCreatedItem(id){
+  APP.items=APP.items.filter(i=>i.id!==id);
+  renderCreatedItems();
+}
+
+// ============================================================
+// BAZAR MASTER
+// ============================================================
+let _bazarItemId=null;
+function openBazarPriceModal(id){
+  const item=APP.items.find(i=>i.id===id); if(!item) return;
+  _bazarItemId=id;
+  document.getElementById('bazar-price-item-name').textContent=item.name+' — '+item.subtype;
+  document.getElementById('bazar-price-value').value=item.value;
+  openModal('modal-bazar-price');
+}
+function confirmSendToBazar(){
+  if(_bazarScrollId){
+    confirmSendScrollToBazar();
+    _bazarScrollId=null;
+    return;
+  }
+  const item=APP.items.find(i=>i.id===_bazarItemId); if(!item) return;
+  const price=parseInt(document.getElementById('bazar-price-value').value)||item.value;
+  APP.bazar.push({...item,id:generateId(),bazarPrice:price});
+  fbSaveBazar();
+  renderBazarMaster();
+  closeModal('modal-bazar-price');
+  showToast(`"${item.name}" enviado al bazar ✓`,'gold');
+}function renderBazarMaster(){
+  const grid=document.getElementById('bazar-master-grid'); if(!grid) return;
+  if(APP.bazar.length===0){
+    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><span class="empty-icon">🏪</span><p>El bazar está vacío</p></div>`;
+    return;
+  }
+  grid.innerHTML=APP.bazar.map(item=>`
+    <div class="item-card rarity-${item.rarity}">
+      ${renderItemCard(item)}
+      <div style="margin-top:6px;font-family:var(--font-mono);font-size:0.8rem;color:var(--gold)">Precio bazar: ${item.bazarPrice} 🪙</div>
+      <button class="btn btn-danger btn-sm w-full" style="margin-top:8px" onclick="removeFromBazar('${item.id}')">✕ Retirar</button>
+    </div>
+  `).join('');
+}
+function removeFromBazar(id){
+  APP.bazar=APP.bazar.filter(i=>i.id!==id);
+  fbSaveBazar();
+  renderBazarMaster();
+}
+
+// ============================================================
+// PERGAMINOS MASTER
+// ============================================================
+function createScroll(){
+  const name=document.getElementById('scroll-name').value.trim();
+  if(!name){ showToast('Introduce un nombre','error'); return; }
+  const scroll={
+    id:generateId(),type:'pergamino',subtype:'Pergamino',name,quality:'-',
+    desc:document.getElementById('scroll-desc').value.trim(),
+    uses:parseInt(document.getElementById('scroll-uses').value)||3,
+    intReq:parseInt(document.getElementById('scroll-int-req').value)||10,
+    value:parseInt(document.getElementById('scroll-value').value)||50,
+    rarity:'rare',stats:{},
+  };
+  APP.scrolls.push(scroll);
+  fbSaveScrolls();
+  renderMasterScrolls();
+  document.getElementById('scroll-name').value='';
+  document.getElementById('scroll-desc').value='';
+  showToast('Pergamino creado ✓','success');
+}
+function renderMasterScrolls(){
+  const grid=document.getElementById('master-scrolls-grid'); if(!grid) return;
+  if(APP.scrolls.length===0){
+    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><span class="empty-icon">📜</span><p>Crea pergaminos en Creación</p></div>`;
+    return;
+  }
+  grid.innerHTML=APP.scrolls.map(s=>`
+    <div class="item-card rarity-rare" style="border-color:rgba(123,94,167,0.4)">
+      <div class="item-type">Pergamino</div>
+      <div class="item-name">${s.name}</div>
+      <div style="font-size:0.8rem;color:var(--text-dim);font-style:italic;margin:6px 0">${s.desc||''}</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
+        <div class="item-stat">Usos: <span>${s.uses}</span></div>
+        <div class="item-stat">Int. min: <span>${s.intReq}</span></div>
+      </div>
+      <div class="item-value">🪙 <span>${s.value}</span></div>
+      <div style="display:flex;gap:5px;margin-top:8px;flex-wrap:wrap">
+        <button class="btn btn-gold btn-sm" onclick="openBazarScrollModal('${s.id}')">→ Bazar</button>
+        <button class="btn btn-primary btn-sm" onclick="openSendScrollModal('${s.id}')">→ Jugador</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteScroll('${s.id}')">🗑</button>
+      </div>
+    </div>
+  `).join('');
+}
+function deleteScroll(id){
+  APP.scrolls=APP.scrolls.filter(s=>s.id!==id);
+  fbSaveScrolls();
+  renderMasterScrolls();
+}
+function createPotion(){
+  const heal=parseInt(document.getElementById('potion-heal').value)||20;
+  const qty=parseInt(document.getElementById('potion-qty').value)||1;
+  for(let i=0;i<qty;i++){
+    APP.items.push({
+      id:generateId(),type:'pocion',subtype:'Poción',
+      name:'Poción de Curación',quality:'-',heal,
+      stats:{},value:Math.max(1,Math.round(heal/10)),rarity:'common',
+      description:`Restaura ${heal} puntos de vida.`,
+    });
+  }
+  renderCreatedItems();
+  showToast(`${qty} poción(es) creada(s) ✓`,'success');
+}
+
+// ============================================================
+// DICCIONARIO
+// ============================================================
+function renderDictionary(){
+  const c=document.getElementById('dictionary-grid'); if(!c) return;
+  c.innerHTML=DICT_TYPES.map(t=>{
+    const d=APP.dictionary[t.key]||{names:[],qualities:[]};
+    const names=(d.names||[]).map(n=>`<span class="badge badge-common" style="cursor:pointer;gap:4px" onclick="removeDictEntry('${t.key}','names','${n}')">${n} ✕</span>`).join('');
+    const quals=(d.qualities||[]).map(q=>`<span class="badge badge-rare" style="cursor:pointer;gap:4px" onclick="removeDictEntry('${t.key}','qualities','${q}')">${q} ✕</span>`).join('');
+    return `<div class="card mb-16">
+      <div class="card-header"><h3>${t.label}</h3></div>
+      <div class="grid-2">
+        <div>
+          <h4 style="margin-bottom:8px;color:var(--gold)">Nombres</h4>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;min-height:28px;margin-bottom:8px">${names||'<span style="color:var(--text-ghost);font-size:0.8rem;font-style:italic">Vacío</span>'}</div>
+          <div class="input-row">
+            <input type="text" id="dn-${t.key}" placeholder="Nuevo nombre..." onkeydown="if(event.key==='Enter')addDictEntry('${t.key}','names')">
+            <button class="btn btn-gold btn-sm" onclick="addDictEntry('${t.key}','names')">+</button>
+          </div>
+        </div>
+        <div>
+          <h4 style="margin-bottom:8px;color:var(--gold)">Cualidades</h4>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;min-height:28px;margin-bottom:8px">${quals||'<span style="color:var(--text-ghost);font-size:0.8rem;font-style:italic">Vacío</span>'}</div>
+          <div class="input-row">
+            <input type="text" id="dq-${t.key}" placeholder="Nueva cualidad..." onkeydown="if(event.key==='Enter')addDictEntry('${t.key}','qualities')">
+            <button class="btn btn-gold btn-sm" onclick="addDictEntry('${t.key}','qualities')">+</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function addDictEntry(typeKey, field){
+  const inputId=field==='names'?`dn-${typeKey}`:`dq-${typeKey}`;
+  const inp=document.getElementById(inputId);
+  const val=inp?.value.trim(); if(!val) return;
+  if(!APP.dictionary[typeKey]) APP.dictionary[typeKey]={names:[],qualities:[]};
+  if(!APP.dictionary[typeKey][field].includes(val)) APP.dictionary[typeKey][field].push(val);
+  inp.value='';
+  fbSaveDict();
+  renderDictionary();
+}
+function removeDictEntry(typeKey, field, val){
+  if(!APP.dictionary[typeKey]) return;
+  APP.dictionary[typeKey][field]=APP.dictionary[typeKey][field].filter(v=>v!==val);
+  fbSaveDict();
+  renderDictionary();
+}
+
+// ============================================================
+// ENEMIGOS
+// ============================================================
+function generateEnemy(){
+  const gv=parseInt(document.getElementById('enemy-gen-value').value)||50;
+  const names=['Orco','Goblin','Troll','Esqueleto','Zombie','Bandido','Lobo','Araña Gigante','Vampiro','Demonio','Ogro','Cobra Gigante'];
+  const sfx=['Berserker','Guardia','Alfa','Jefe','Corrupto','de las Sombras','Anciano','Mutado',''];
+  const baseName=`${randFrom(names)} ${randFrom(sfx)}`.trim();
+  const count=APP.enemies.filter(e=>e.name.startsWith(baseName)).length+1;
+  const name=count>1?`${baseName} ${count}`:baseName;
+  const vals=generateBalanced(7,gv);
+  const dice=closestDice(Math.max(2.5,gv/7));
+  const enemy={
+    id:generateId(),name,
+    vida:Math.max(5,vals[0]),armadura:Math.max(0,vals[1]),
+    reduccionDaño:Math.max(0,vals[2]),movimiento:9,
+    ataque:Math.max(1,vals[3]),dadoGolpe:diceStr(dice.num,dice.sides),
+    daño:Math.max(1,vals[4]),salvacion:Math.max(5,vals[5]),
+  };
+  APP.enemies.push(enemy);
+  fbSaveEnemies();
+  renderEnemies();
+  showToast(`"${name}" generado ✓`,'error');
+}
+function createManualEnemy(){
+  const enemy={
+    id:generateId(),
+    name:document.getElementById('enemy-name').value||'Enemigo',
+    vida:parseInt(document.getElementById('enemy-hp').value)||30,
+    armadura:parseInt(document.getElementById('enemy-armor').value)||10,
+    reduccionDaño:parseInt(document.getElementById('enemy-dr').value)||0,
+    movimiento:parseInt(document.getElementById('enemy-move').value)||9,
+    ataque:parseInt(document.getElementById('enemy-atk').value)||5,
+    dadoGolpe:document.getElementById('enemy-dice').value||'1D8',
+    daño:parseInt(document.getElementById('enemy-dmg').value)||5,
+    salvacion:parseInt(document.getElementById('enemy-save').value)||12,
+  };
+  APP.enemies.push(enemy);
+  fbSaveEnemies();
+  renderEnemies();
+  closeModal('modal-create-enemy');
+  showToast(`"${enemy.name}" creado ✓`,'success');
+}
+function renderEnemies(){
+  const grid=document.getElementById('enemies-grid'); if(!grid) return;
+  if(APP.enemies.length===0){
+    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><span class="empty-icon">💀</span><p>No hay enemigos</p></div>`;
+    return;
+  }
+  grid.innerHTML=APP.enemies.map(e=>`
+    <div class="card" style="border-color:rgba(201,64,64,0.3)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <h3 style="color:var(--red-bright);font-size:0.95rem;margin:0">${e.name}</h3>
+        <div style="display:flex;gap:5px">
+          <button class="btn btn-sm" onclick="copyEnemy('${e.id}')">⧉</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteEnemy('${e.id}')">🗑</button>
+        </div>
+      </div>
+      <div class="stat-block" style="grid-template-columns:repeat(3,1fr);word-break:break-all">
+        <div class="stat-cell"><div class="stat-label">Vida</div><div class="stat-value" style="font-size:1rem">${e.vida}</div></div>
+        <div class="stat-cell"><div class="stat-label">Armadura</div><div class="stat-value" style="font-size:1rem">${e.armadura}</div></div>
+        <div class="stat-cell"><div class="stat-label">Red.Daño</div><div class="stat-value" style="font-size:1rem">${Math.round(e.reduccionDaño/10)}</div></div>
+        <div class="stat-cell"><div class="stat-label">Movim.</div><div class="stat-value" style="font-size:1rem">${e.movimiento}m</div></div>
+        <div class="stat-cell"><div class="stat-label">Ataque</div><div class="stat-value" style="font-size:1rem">${e.ataque}</div></div>
+        <div class="stat-cell"><div class="stat-label">D.Golpe</div><div class="stat-value" style="font-size:1rem">${e.dadoGolpe}</div></div>
+        <div class="stat-cell"><div class="stat-label">Daño</div><div class="stat-value" style="font-size:1rem">${e.daño}</div></div>
+        <div class="stat-cell"><div class="stat-label">Salvación</div><div class="stat-value" style="font-size:1rem">${e.salvacion}</div></div>
+      </div>
+    </div>
+  `).join('');
+}
+function copyEnemy(id){
+  const orig=APP.enemies.find(e=>e.id===id); if(!orig) return;
+  APP.enemies.push({...orig,id:generateId(),name:orig.name+' (copia)'});
+  fbSaveEnemies(); renderEnemies();
+  showToast('Enemigo copiado ✓','info');
+}
+function deleteEnemy(id){
+  APP.enemies=APP.enemies.filter(e=>e.id!==id);
+  fbSaveEnemies(); renderEnemies();
+}
+function clearAllEnemies(){
+  document.getElementById('confirm-title').textContent='¿Borrar todos los enemigos?';
+  document.getElementById('confirm-msg').textContent='Se eliminarán todos los enemigos del campo de batalla.';
+  document.getElementById('confirm-ok-btn').onclick=()=>{
+    APP.enemies=[]; fbSaveEnemies(); renderEnemies();
+    closeModal('modal-confirm');
+    showToast('Todos los enemigos eliminados','error');
+  };
+  openModal('modal-confirm');
+}
+
+// ============================================================
+// PANEL JUGADOR
+// ============================================================
+function initPlayerPanel(){
+  const p=APP.currentPlayer; if(!p) return;
+  if(!p.attrs)       p.attrs={Fuerza:10,Destreza:10,Constitucion:10,Inteligencia:10,Sabiduria:10,Carisma:10};
+  if(!p.manualStats) p.manualStats={};
+  if(!p.masterBonus) p.masterBonus={};
+  if(!p.equipped)    p.equipped={};
+  if(!p.inventory)   p.inventory=[];
+  if(!p.magicSlots)  p.magicSlots=[];
+  if(!p.customPanel) p.customPanel=['Fuerza','Destreza','Vida','Armadura'];
+  if(p.hp===null||p.hp===undefined) p.hp=getMaxHP(p);
+  updatePlayerHeader();
+  renderPlayerHome();
+}
+
+function updatePlayerHeader(){
+  const p=APP.currentPlayer; if(!p) return;
+  document.getElementById('player-header-name').textContent=p.name;
+  document.getElementById('player-header-coins').textContent=p.coins||0;
+}
+
+// ============================================================
+// JUGADOR: INICIO
+// ============================================================
+function renderPlayerHome(){
+  const p=APP.currentPlayer; if(!p) return;
+  const max=getMaxHP(p);
+  if(p.hp>max) p.hp=max;
+  document.getElementById('player-hp-max').textContent=max;
+  document.getElementById('player-hp-current').textContent=p.hp;
+  updateHpBar();
+  renderCustomPanel();
+}
+
+function updateHpBar(){
+  const p=APP.currentPlayer; if(!p) return;
+  const max=getMaxHP(p);
+  const pct=max>0?Math.max(0,Math.min(100,(p.hp/max)*100)):0;
+  const bar=document.getElementById('hp-bar');
+  bar.style.width=pct+'%';
+  if(pct>60) bar.style.background='linear-gradient(90deg,var(--green),var(--green-bright))';
+  else if(pct>30) bar.style.background='linear-gradient(90deg,var(--gold-dim),var(--gold))';
+  else bar.style.background='linear-gradient(90deg,var(--red),var(--red-bright))';
+}
+
+function changeHPBy(dir, useAmount=false){
+  const p=APP.currentPlayer; if(!p) return;
+  const amount=useAmount?(parseInt(document.getElementById('hp-amount').value)||1):1;
+  const max=getMaxHP(p);
+  p.hp=Math.max(0,Math.min(max,p.hp+dir*amount));
+  document.getElementById('player-hp-current').textContent=p.hp;
+  updateHpBar();
+  fbSavePlayer(p.id);
+}
+function fullHeal(){
+  const p=APP.currentPlayer; if(!p) return;
+  p.hp=getMaxHP(p);
+  renderPlayerHome();
+  fbSavePlayer(p.id);
+  showToast('¡Vida restaurada al máximo! 💚','success');
+}
+
+function renderCustomPanel(){
+  const p=APP.currentPlayer; if(!p) return;
+  const c=document.getElementById('custom-info-panel'); if(!c) return;
+  const stats=p.customPanel||[];
+  if(stats.length===0){
+    c.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><span class="empty-icon">📊</span><p>Pulsa Editar para añadir estadísticas</p></div>`;
+    return;
+  }
+  c.innerHTML=stats.map(s=>{
+    const val=getTotalStat(p,s);
+    return `<div class="stat-cell"><div class="stat-label">${s}</div><div class="stat-value">${val}</div></div>`;
+  }).join('');
+}
+
+function saveCustomPanel(){
+  const p=APP.currentPlayer; if(!p) return;
+  const checks=document.querySelectorAll('.cpanel-check:checked');
+  p.customPanel=Array.from(checks).map(c=>c.value);
+  fbSavePlayer(p.id);
+  renderCustomPanel();
+  closeModal('modal-custom-panel');
+  showToast('Panel guardado ✓','info');
+}
+
+document.getElementById('modal-custom-panel').addEventListener('click',()=>{});
+function openCustomPanelModal(){
+  const p=APP.currentPlayer; if(!p) return;
+  const sel=p.customPanel||[];
+  const container=document.getElementById('custom-panel-options');
+  container.style.maxHeight='60vh';
+  container.style.overflowY='auto';
+  container.style.display='flex';
+  container.style.flexDirection='column';
+  container.style.gap='8px';
+  container.innerHTML=ALL_STATS.map(s=>`
+    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-family:var(--font-body);text-transform:none;font-size:0.9rem;letter-spacing:0;color:var(--text-main)">
+      <input type="checkbox" class="cpanel-check" value="${s}" ${sel.includes(s)?'checked':''} style="width:auto">
+      ${s}
+    </label>
+  `).join('');
+  openModal('modal-custom-panel');
+}
+
+// ============================================================
+// JUGADOR: FICHA
+// ============================================================
+let fichaEditMode=false;
+let fichaBackup={};
+
+function renderPlayerFicha(){
+  const p=APP.currentPlayer; if(!p) return;
+  renderFichaBlock('ficha-attrs',   ATTRS,        p);
+  renderFichaBlock('ficha-combat',  COMBAT_STATS, p);
+  renderFichaBlock('ficha-skills',  SKILLS,       p);
+}
+
+function renderFichaBlock(containerId, stats, p){
+  const c=document.getElementById(containerId); if(!c) return;
+  c.innerHTML=`
+    <div class="ficha-row header">
+      <span>Estadística</span><span style="text-align:center">Auto</span>
+      <span style="text-align:center">Manual</span><span style="text-align:center">Total</span>
+    </div>
+    ${stats.map(s=>{
+      if(s==='Dado de Golpe'){
+        const val=getTotalStat(p,s);
+        return `<div class="ficha-row">
+          <span class="ficha-stat-name">Dado de Golpe<span class="ficha-stat-src">arma equipada</span></span>
+          <span class="ficha-col auto">—</span>
+          <span class="ficha-col manual" style="text-align:center;color:var(--text-ghost)">—</span>
+          <span class="ficha-col total">${val}</span>
+        </div>`;
+      }
+      if(s==='Movimiento'){
+        return `<div class="ficha-row">
+          <span class="ficha-stat-name">Movimiento</span>
+          <span class="ficha-col auto">9m</span>
+          <span class="ficha-col manual" style="text-align:center;color:var(--text-ghost)">—</span>
+          <span class="ficha-col total">9m</span>
+        </div>`;
+      }
+      const auto=getAutoStat(p,s);
+      const manual=p.manualStats?.[s]||0;
+      const total=auto+manual;
+      const src=STAT_SOURCE[s];
+      const mod=ATTRS.includes(s)?`<span class="ficha-mod">${floorMod(auto)>=0?'+':''}${floorMod(auto)} mod</span>`:'';
+      return `<div class="ficha-row">
+        <span class="ficha-stat-name">${s}${src&&!ATTRS.includes(s)?`<span class="ficha-stat-src">${src.substring(0,3)}</span>`:''}</span>
+        <span class="ficha-col auto">${auto}</span>
+        <div class="ficha-col manual">
+          <input type="number" value="${manual}" ${fichaEditMode?'':'disabled'}
+            style="${fichaEditMode?'':'pointer-events:none;opacity:0.4'}"
+            onchange="updateManualStat('${s}',this.value)">
+        </div>
+        <span class="ficha-col total">${total}${mod}</span>
+      </div>`;
+    }).join('')}
+  `;
+}
+
+function updateManualStat(stat, val){
+  const p=APP.currentPlayer; if(!p) return;
+  if(!p.manualStats) p.manualStats={};
+  p.manualStats[stat]=parseInt(val)||0;
+  renderPlayerFicha();
+}
+
+function toggleEditFicha(){
+  fichaEditMode=!fichaEditMode;
+  const btn=document.getElementById('btn-edit-ficha');
+  const bar=document.getElementById('ficha-edit-bar');
+  if(fichaEditMode){
+    fichaBackup=JSON.parse(JSON.stringify(APP.currentPlayer.manualStats||{}));
+    btn.textContent='✕ Cancelar';
+    btn.className='btn btn-sm btn-danger';
+    bar.style.display='flex';
+  } else {
+    btn.textContent='✎ Editar Ficha';
+    btn.className='btn btn-sm';
+    bar.style.display='none';
+  }
+  renderPlayerFicha();
+}
+function saveEditFicha(){
+  fbSavePlayer(APP.currentPlayer.id);
+  fichaEditMode=false;
+  document.getElementById('btn-edit-ficha').textContent='✎ Editar Ficha';
+  document.getElementById('btn-edit-ficha').className='btn btn-sm';
+  document.getElementById('ficha-edit-bar').style.display='none';
+  renderPlayerFicha();
+  renderPlayerHome();
+  showToast('Ficha guardada ✓','success');
+}
+function cancelEditFicha(){
+  APP.currentPlayer.manualStats=JSON.parse(JSON.stringify(fichaBackup));
+  fichaEditMode=false;
+  document.getElementById('btn-edit-ficha').textContent='✎ Editar Ficha';
+  document.getElementById('btn-edit-ficha').className='btn btn-sm';
+  document.getElementById('ficha-edit-bar').style.display='none';
+  renderPlayerFicha();
+}
+
+// ============================================================
+// JUGADOR: EQUIPO
+// ============================================================
+function renderEquipScreen(){
+  renderEquippedSlots();
+  renderInventoryGrids();
+}
+
+function renderEquippedSlots(){
+  const p=APP.currentPlayer;
+  const c=document.getElementById('equipped-slots'); if(!c) return;
+  c.innerHTML=EQUIP_SLOTS.map(slot=>{
+    const item=p.equipped?.[slot.id];
+    const statsHtml=item?Object.entries(item.stats||{}).map(([k,v])=>{
+      let dv=v;
+      if(k==='Reduccion de Daño') dv=Math.round((parseInt(v)||0)/10);
+      return `<div class="item-stat">${k}: <span>${dv}</span></div>`;
+    }).join(''):'';
+    return `<div class="equip-slot">
+      <div class="equip-slot-icon">${slot.icon}</div>
+      <div class="equip-slot-info">
+        <div class="equip-slot-label">${slot.label}</div>
+        ${item
+          ?`<div class="equip-slot-item">${item.name} <span style="color:var(--text-dim);font-style:italic">${item.quality||''}</span></div>
+             <span class="badge badge-${item.rarity}" style="margin-top:2px">${RARITY_TABLE.find(r=>r.key===item.rarity)?.name||''}</span>
+             <div class="item-stats" style="margin-top:6px">${statsHtml}</div>`
+          :`<div class="equip-slot-empty">— Vacío —</div>`}
+      </div>
+      ${item?`<button class="btn btn-danger btn-sm" onclick="unequipItem('${slot.id}')">✕</button>`:''}
+    </div>`;
+  }).join('');
+}
+
+function renderInventoryGrids(){
+  const p=APP.currentPlayer; if(!p||!p.inventory) return;
+  const equip=p.inventory.filter(i=>['arma','arma_dist','escudo','yelmo','armadura','accesorio'].includes(i.type));
+  const consum=p.inventory.filter(i=>['pocion','utilidad'].includes(i.type));
+  const scrolls=p.inventory.filter(i=>i.type==='pergamino');
+
+  renderInvGrid('inv-equip-grid', equip, '🎒', 'Sin equipo', item=>
+    `<button class="btn btn-gold btn-sm" onclick="equipItem('${item.id}')">⚔ Equipar</button>
+     <button class="btn btn-sm" onclick="sellItem('${item.id}')">💰 Vender</button>`
+  );
+  renderInvGrid('inv-consumibles-grid', consum, '🧪', 'Sin consumibles', item=>
+    item.type==='pocion'
+      ?`<button class="btn btn-success btn-sm" onclick="usePotion('${item.id}')">✚ Usar</button>
+        <button class="btn btn-sm" onclick="sellItem('${item.id}')">💰 Vender</button>`
+      :`<button class="btn btn-sm" onclick="useUtility('${item.id}')">✔ Usar</button>
+        <button class="btn btn-sm" onclick="sellItem('${item.id}')">💰 Vender</button>`
+  );
+  renderInvGrid('inv-scrolls-grid', scrolls, '📜', 'Sin pergaminos', item=>{
+    const intOk=getTotalStat(p,'Inteligencia')>=(item.intReq||0);
+    return intOk
+      ?`<button class="btn btn-primary btn-sm" onclick="equipScroll('${item.id}')">✨ Equip. Magia</button>
+        <button class="btn btn-sm" onclick="sellItem('${item.id}')">💰 Vender</button>`
+      :`<span style="font-size:0.75rem;color:var(--red)">Int. insuficiente (req. ${item.intReq})</span>
+        <button class="btn btn-sm" onclick="sellItem('${item.id}')">💰 Vender</button>`;
+  });
+
+  document.getElementById('inventory-count').textContent=`${p.inventory.length} objeto${p.inventory.length!==1?'s':''}`;
+}
+
+function renderInvGrid(containerId, items, icon, emptyMsg, actionsFn){
+  const grid=document.getElementById(containerId); if(!grid) return;
+  if(items.length===0){
+    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><span class="empty-icon">${icon}</span><p>${emptyMsg}</p></div>`;
+    return;
+  }
+  grid.innerHTML=items.map(item=>`
+    <div class="item-card rarity-${item.rarity}">
+      ${renderItemCard(item)}
+      <div style="display:flex;gap:5px;margin-top:8px;flex-wrap:wrap">${actionsFn(item)}</div>
+    </div>
+  `).join('');
+}
+
+function findSlotForItem(item, p){
+  if(item.type==='arma'||item.type==='arma_dist') return 'mano';
+  if(item.type==='escudo'||item.subtype==='Daga'){
+    const mano=p.equipped?.mano;
+    if(mano&&(mano.hands===2||mano.type==='arma_dist')){ showToast('No puedes con arma a dos manos','error'); return null; }
+    return 'auxiliar';
+  }
+  if(item.type==='yelmo')    return 'cabeza';
+  if(item.type==='armadura') return 'torso';
+  if(item.type==='accesorio'){
+    for(const s of ['accesorio1','accesorio2','accesorio3']){
+      if(!p.equipped[s]) return s;
+    }
+    return 'accesorio1';
+  }
+  return null;
+}
+
+function equipItem(itemId){
+  const p=APP.currentPlayer;
+  const item=p.inventory.find(i=>i.id===itemId); if(!item) return;
+  const slot=findSlotForItem(item,p); if(!slot) return;
+  if(p.equipped[slot]) p.inventory.push(p.equipped[slot]);
+  p.equipped[slot]=item;
+  p.inventory=p.inventory.filter(i=>i.id!==itemId);
+  if(item.type==='arma_dist') delete p.equipped.auxiliar;
+  fbSavePlayer(p.id);
+  renderEquipScreen();
+  showToast(`${item.name} equipado ✓`,'gold');
+}
+function unequipItem(slotId){
+  const p=APP.currentPlayer;
+  const item=p.equipped?.[slotId]; if(!item) return;
+  p.inventory.push(item);
+  delete p.equipped[slotId];
+  fbSavePlayer(p.id);
+  renderEquipScreen();
+  showToast(`${item.name} desequipado`,'info');
+}
+function sellItem(itemId){
+  const p=APP.currentPlayer;
+  const item=p.inventory.find(i=>i.id===itemId); if(!item) return;
+  p.coins=(p.coins||0)+(item.value||0);
+  p.inventory=p.inventory.filter(i=>i.id!==itemId);
+  fbSavePlayer(p.id);
+  updatePlayerHeader();
+  renderEquipScreen();
+  showToast(`Vendido "${item.name}" por ${item.value} 🪙`,'gold');
+}
+function usePotion(itemId){
+  const p=APP.currentPlayer;
+  const item=p.inventory.find(i=>i.id===itemId); if(!item) return;
+  const max=getMaxHP(p);
+  p.hp=Math.min(max,(p.hp||0)+(item.heal||0));
+  p.inventory=p.inventory.filter(i=>i.id!==itemId);
+  fbSavePlayer(p.id);
+  renderEquipScreen();
+  renderPlayerHome();
+  showToast(`Usaste "${item.name}". +${item.heal} HP 💚`,'success');
+}
+function useUtility(itemId){
+  const p=APP.currentPlayer;
+  const item=p.inventory.find(i=>i.id===itemId); if(!item) return;
+  p.inventory=p.inventory.filter(i=>i.id!==itemId);
+  fbSavePlayer(p.id);
+  renderEquipScreen();
+  showToast(`Usaste "${item.name}"`,'info');
+}
+
+// ============================================================
+// JUGADOR: MAGIA
+// ============================================================
+function equipScroll(itemId){
+  const p=APP.currentPlayer;
+  const item=p.inventory.find(i=>i.id===itemId); if(!item) return;
+  if(getTotalStat(p,'Inteligencia')<(item.intReq||0)){ showToast('Inteligencia insuficiente','error'); return; }
+  p.magicSlots.push({...item,remainingUses:item.uses});
+  p.inventory=p.inventory.filter(i=>i.id!==itemId);
+  fbSavePlayer(p.id);
+  renderEquipScreen();
+  renderMagicScreen();
+  showToast(`"${item.name}" equipado en Magia ✨`,'success');
+}
+function renderMagicScreen(){
+  const p=APP.currentPlayer; if(!p) return;
+  const grid=document.getElementById('magic-slots-grid'); if(!grid) return;
+  if(!p.magicSlots||p.magicSlots.length===0){
+    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><span class="empty-icon">✨</span><p>No tienes pergaminos equipados</p></div>`;
+    return;
+  }
+  grid.innerHTML=p.magicSlots.map((s,idx)=>`
+    <div class="item-card" style="border:1px solid rgba(123,94,167,0.4);box-shadow:0 0 10px rgba(123,94,167,0.1)">
+      <div class="item-type">Pergamino</div>
+      <div class="item-name">${s.name}</div>
+      <div style="font-size:0.82rem;color:var(--text-dim);font-style:italic;margin:6px 0">${s.desc||''}</div>
+      <div class="item-stat" style="display:inline-flex;margin-bottom:10px">Usos restantes: <span style="margin-left:4px;color:var(--accent-bright)">${s.remainingUses}</span></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn btn-primary btn-sm" onclick="useScroll(${idx})" ${s.remainingUses<=0?'disabled':''}>✨ Usar</button>
+        <button class="btn btn-danger btn-sm" onclick="discardScroll(${idx})">🗑 Tirar</button>
+      </div>
+    </div>
+  `).join('');
+}
+function useScroll(idx){
+  const p=APP.currentPlayer;
+  const s=p.magicSlots[idx]; if(!s||s.remainingUses<=0) return;
+  s.remainingUses--;
+  if(s.remainingUses<=0){ p.magicSlots.splice(idx,1); showToast(`"${s.name}" agotado`,'info'); }
+  else { showToast(`Usaste "${s.name}". Usos: ${s.remainingUses}`,'success'); }
+  fbSavePlayer(p.id);
+  renderMagicScreen();
+}
+function discardScroll(idx){
+  const p=APP.currentPlayer;
+  const name=p.magicSlots[idx]?.name;
+  p.magicSlots.splice(idx,1);
+  fbSavePlayer(p.id);
+  renderMagicScreen();
+  showToast(`"${name}" tirado`,'info');
+}
+
+// ============================================================
+// JUGADOR: TIENDA
+// ============================================================
+function renderShopScreen(){
+  renderChestShop();
+  renderBazarPlayer();
+}
+function renderChestShop(){
+  const grid=document.getElementById('chest-shop-grid'); if(!grid) return;
+  const chests=[
+    {key:'basico',label:'Básico',color:'var(--rarity-common)'},
+    {key:'bueno',label:'Bueno',color:'var(--rarity-rare)'},
+    {key:'extraordinario',label:'Extraordinario',color:'var(--rarity-extra)'},
+    {key:'legendario',label:'Legendario',color:'var(--rarity-legendary)'},
+  ];
+  grid.innerHTML=chests.map(ch=>{
+    const cfg=APP.chestConfig[ch.key];
+    return `<div class="card text-center" style="border-color:${ch.color}40;cursor:pointer" onclick="openChest('${ch.key}')">
+      <div style="font-size:2.2rem;margin-bottom:8px">⚰</div>
+      <h3 style="color:${ch.color};font-size:0.88rem;margin-bottom:6px">${ch.label}</h3>
+      <div class="gold-value" style="font-size:1.1rem">🪙 ${cfg.price}</div>
+      <p style="font-size:0.72rem;color:var(--text-dim);margin-top:4px">Val. ${cfg.minVal}–${cfg.maxVal}</p>
+      <button class="btn btn-gold btn-sm w-full" style="margin-top:10px">Comprar</button>
+    </div>`;
+  }).join('');
+}
+
+let _pendingChest=[], _selectedChestIdx=null;
+function openChest(key){
+  const p=APP.currentPlayer;
+  const cfg=APP.chestConfig[key];
+  if((p.coins||0)<cfg.price){ showToast(`Necesitas ${cfg.price} 🪙`,'error'); return; }
+  p.coins-=cfg.price;
+  updatePlayerHeader();
+  fbSavePlayer(p.id);
+  const types=['arma','arma_dist','escudo','yelmo','armadura','accesorio','utilidad','pocion'];
+  _pendingChest=[];
+  _selectedChestIdx=null;
+  for(let i=0;i<3;i++){
+    const gv=Math.max(1,randInt(cfg.minVal,cfg.maxVal)+(APP.chestBias||0));
+    _pendingChest.push(generateItem(randFrom(types),gv));
+  }
+  document.getElementById('chest-open-area').style.display='block';
+  document.getElementById('chest-open-title').textContent=`Cofre ${key} — Elige un objeto`;
+  document.getElementById('btn-claim').disabled=true;
+  document.getElementById('chest-choice-grid').innerHTML=_pendingChest.map((item,i)=>`
+    <div class="item-card rarity-${item.rarity}" id="cc-${i}" style="cursor:pointer" onclick="selectChestItem(${i})">
+      ${renderItemCard(item)}
+    </div>
+  `).join('');
+  document.getElementById('chest-open-area').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function selectChestItem(idx){
+  _selectedChestIdx=idx;
+  document.querySelectorAll('[id^="cc-"]').forEach((el,i)=>{
+    el.style.outline=i===idx?'2px solid var(--gold)':'none';
+    el.style.boxShadow=i===idx?'0 0 14px rgba(201,168,76,0.4)':'';
+  });
+  document.getElementById('btn-claim').disabled=false;
+}
+function claimChestItem(){
+  if(_selectedChestIdx===null) return;
+  const p=APP.currentPlayer;
+  p.inventory.push({..._pendingChest[_selectedChestIdx]});
+  fbSavePlayer(p.id);
+  document.getElementById('chest-open-area').style.display='none';
+  showToast(`¡"${_pendingChest[_selectedChestIdx].name}" añadido al inventario! 🎉`,'gold');
+  _pendingChest=[];_selectedChestIdx=null;
+}
+function renderBazarPlayer(){
+  const grid=document.getElementById('bazar-player-grid'); if(!grid) return;
+  if(APP.bazar.length===0){
+    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><span class="empty-icon">🏪</span><p>El bazar está vacío</p></div>`;
+    return;
+  }
+  const p=APP.currentPlayer;
+  grid.innerHTML=APP.bazar.map(item=>`
+    <div class="item-card rarity-${item.rarity}">
+      ${renderItemCard(item)}
+      <button class="btn btn-gold w-full btn-sm" style="margin-top:8px"
+        onclick="buyFromBazar('${item.id}')"
+        ${(p.coins||0)<item.bazarPrice?'disabled':''}>
+        🪙 Comprar (${item.bazarPrice})
+      </button>
+    </div>
+  `).join('');
+}
+function buyFromBazar(itemId){
+  const p=APP.currentPlayer;
+  const item=APP.bazar.find(i=>i.id===itemId); if(!item) return;
+  if((p.coins||0)<item.bazarPrice){ showToast('Monedas insuficientes','error'); return; }
+  p.coins-=item.bazarPrice;
+  p.inventory.push({...item,id:generateId(),bazarPrice:undefined});
+  APP.bazar=APP.bazar.filter(i=>i.id!==itemId);
+  fbSaveBazar();
+  fbSavePlayer(p.id);
+  updatePlayerHeader();
+  renderShopScreen();
+  showToast(`Compraste "${item.name}" ✓`,'gold');
+}
+
+// ============================================================
+// INICIO
+// ============================================================
+// ENVIAR PERGAMINO AL BAZAR
+let _bazarScrollId=null;
+function openBazarScrollModal(id){
+  const s=APP.scrolls.find(x=>x.id===id); if(!s) return;
+  _bazarScrollId=id;
+  _bazarItemId=null;
+  document.getElementById('bazar-price-item-name').textContent=s.name+' — Pergamino';
+  document.getElementById('bazar-price-value').value=s.value;
+  openModal('modal-bazar-price');
+}
+function confirmSendScrollToBazar(){
+  const s=APP.scrolls.find(x=>x.id===_bazarScrollId); if(!s) return;
+  const price=parseInt(document.getElementById('bazar-price-value').value)||s.value;
+  APP.bazar.push({...s,id:generateId(),type:'pergamino',bazarPrice:price});
+  fbSaveBazar();
+  closeModal('modal-bazar-price');
+  showToast(`"${s.name}" enviado al bazar ✓`,'gold');
+}
+
+// ENVIAR PERGAMINO A JUGADOR
+let _sendScrollId=null;
+function openSendScrollModal(id){
+  const s=APP.scrolls.find(x=>x.id===id); if(!s) return;
+  _sendScrollId=id;
+  document.getElementById('confirm-title').textContent='Enviar pergamino a jugador';
+  const playerOpts=Object.values(APP.players).map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+  document.getElementById('confirm-msg').innerHTML=
+    `<div class="form-group" style="margin-top:10px">
+       <label>Selecciona jugador</label>
+       <select id="send-scroll-player">${playerOpts}</select>
+     </div>`;
+  document.getElementById('confirm-ok-btn').textContent='Enviar';
+  document.getElementById('confirm-ok-btn').className='btn btn-primary';
+  document.getElementById('confirm-ok-btn').onclick=doSendScrollToPlayer;
+  openModal('modal-confirm');
+}
+function doSendScrollToPlayer(){
+  const s=APP.scrolls.find(x=>x.id===_sendScrollId); if(!s) return;
+  const pid=document.getElementById('send-scroll-player')?.value; if(!pid) return;
+  const p=APP.players[pid]; if(!p) return;
+  if(!p.inventory) p.inventory=[];
+  p.inventory.push({...s,id:generateId(),type:'pergamino',remainingUses:s.uses});
+  fbSavePlayer(pid);
+  if(APP.currentPlayer?.id===pid) APP.currentPlayer=p;
+  closeModal('modal-confirm');
+  document.getElementById('confirm-ok-btn').textContent='Confirmar';
+  document.getElementById('confirm-ok-btn').className='btn btn-danger';
+  showToast(`"${s.name}" enviado a ${p.name} ✓`,'success');
+  _sendScrollId=null;
+}
+loadFromLocalStorage();
+window.addEventListener('firebase-ready',async()=>{
+  APP.firebaseReady=true;
+  await loadFromFirebase();
+  if(APP.currentScreen==='player-select') renderPlayerSelectList();
+  console.log('🔥 Firebase listo');
+});
+
+
+</script>
+
+</body>
+</html>
