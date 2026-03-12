@@ -1490,9 +1490,14 @@ function saveBonuses(){
   const targets=targetId==='all'?Object.values(APP.players):[APP.players[targetId]].filter(Boolean);
   targets.forEach(p=>{ p.masterBonus={...bonusVals}; fbSavePlayer(p.id); });
   if(APP.currentPlayer){
-    const cp=APP.players[APP.currentPlayer.id];
-    if(cp){ APP.currentPlayer.masterBonus=cp.masterBonus; }
+  const cp=APP.players[APP.currentPlayer.id];
+  if(cp){
+    APP.currentPlayer=cp;
+    updatePlayerHeader();
+    if(APP.currentScreen==='player') renderPlayerHome();
+    if(APP.currentScreen==='player') renderPlayerFicha();
   }
+}
   showToast(`Bonos aplicados a ${targets.length===1?targets[0].name:'todos'} ✓`,'gold');
 }
 
