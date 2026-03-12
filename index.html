@@ -550,18 +550,21 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;hei
 
 <!-- PANTALLA 6: JUGADOR PANEL -->
 <div id="screen-player" class="screen">
-  <header class="player-header">
+  <header class="player-header" style="flex-direction:column;height:auto;padding:10px 14px;gap:8px">
+  <div style="display:flex;align-items:center;gap:8px;width:100%">
     <div class="player-name-display" id="player-header-name">Aventurero</div>
     <div class="coins-display">🪙 <span id="player-header-coins">0</span></div>
-    <nav class="player-nav">
-      <button class="player-nav-btn active" onclick="showPlayerSection('inicio',this)">🏠 Inicio</button>
-      <button class="player-nav-btn" onclick="showPlayerSection('ficha',this)">📋 Ficha</button>
-      <button class="player-nav-btn" onclick="showPlayerSection('equipo',this)">🛡 Equipo</button>
-      <button class="player-nav-btn" onclick="showPlayerSection('magia',this)">✨ Magia</button>
-      <button class="player-nav-btn" onclick="showPlayerSection('tienda',this)">🏪 Tienda</button>
-    </nav>
+    <div style="flex:1"></div>
     <button class="exit-btn-player" onclick="exitPlayer()">Salir ✕</button>
-  </header>
+  </div>
+  <nav class="player-nav" style="width:100%;justify-content:space-around">
+    <button class="player-nav-btn active" onclick="showPlayerSection('inicio',this)">🏠 Inicio</button>
+    <button class="player-nav-btn" onclick="showPlayerSection('ficha',this)">📋 Ficha</button>
+    <button class="player-nav-btn" onclick="showPlayerSection('equipo',this)">🛡 Equipo</button>
+    <button class="player-nav-btn" onclick="showPlayerSection('magia',this)">✨ Magia</button>
+    <button class="player-nav-btn" onclick="showPlayerSection('tienda',this)">🏪 Tienda</button>
+  </nav>
+</header>
   <main class="player-content">
 
     <!-- INICIO -->
@@ -2553,6 +2556,11 @@ function doSendScrollToPlayer(){
   showToast(`"${s.name}" enviado a ${p.name} ✓`,'success');
   _sendScrollId=null;
 }
+// BLOQUEAR BOTÓN ATRÁS MÓVIL
+history.pushState(null,'',location.href);
+window.addEventListener('popstate',()=>{
+  history.pushState(null,'',location.href);
+});
 loadFromLocalStorage();
 function initRealtimeListeners(){
   if(!window._db) return;
