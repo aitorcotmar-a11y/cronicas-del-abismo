@@ -86,8 +86,8 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;hei
 .item-card.rarity-extra{border:1px solid rgba(155,126,199,0.4);box-shadow:0 0 10px rgba(155,126,199,0.1)}
 .item-card.rarity-legendary{border:1px solid rgba(201,122,64,0.5);box-shadow:0 0 14px rgba(201,122,64,0.2)}
 .item-card.rarity-unique{border:1px solid rgba(201,64,64,0.5);box-shadow:0 0 14px rgba(201,64,64,0.2)}
-.item-type{font-family:var(--font-title);font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);margin-bottom:2px}
-.item-name{font-family:var(--font-title);font-size:0.95rem;font-weight:700;color:var(--text-bright)}
+.item-type{font-size:1rem;font-weight:600;color:var(--text-main);margin-bottom:2px}
+.item-name{font-size:1rem;font-weight:600}
 .item-quality{font-style:italic;color:var(--text-mid);font-size:0.88rem}
 .item-stats{margin-top:8px;display:flex;flex-wrap:wrap;gap:5px}
 .item-stat{background:var(--bg-elevated);border:1px solid var(--border-dim);border-radius:var(--radius-sm);padding:2px 7px;font-family:var(--font-mono);font-size:0.72rem;color:var(--text-mid)}
@@ -472,7 +472,7 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;hei
           <div class="form-group mt-16">
             <label>Sesgo de generación <span id="chest-bias-label" style="color:var(--gold)">0</span></label>
             <div class="flex-row"><span style="font-size:0.8rem;color:var(--text-dim)">Peor</span>
-              <input type="range" id="chest-bias" min="-50" max="50" value="0" style="flex:1">
+              <input type="range" id="chest-bias" min="0" max="100" value="50" style="flex:1" oninput="APP.chestBias=this.value/100">
               <span style="font-size:0.8rem;color:var(--text-dim)">Mejor</span>
             </div>
           </div>
@@ -854,13 +854,12 @@ window.APP = {  masterPassword: 'master123',
   enemies: [],
   scrolls: [],
   chestConfig: {
-    basico:         { price: 50,   minVal: 10,  maxVal: 50  },
-    bueno:          { price: 150,  minVal: 51,  maxVal: 150 },
-    extraordinario: { price: 400,  minVal: 151, maxVal: 400 },
-    legendario:     { price: 1000, minVal: 401, maxVal: 999 },
-  },
+    basico:         { price: 50,   minVal: 1,  maxVal: 5  },
+    bueno:          { price: 150,  minVal: 5,  maxVal: 15 },
+    extraordinario: { price: 400,  minVal: 15, maxVal: 35 },
+    legendario:     { price: 1000, minVal: 35, maxVal: 60 },
   chestBias: 0,
-dictionary: {
+  dictionary: {
     arma: {names:['Filo','Muerte','Tormenta'], qualities:['Oxidada','Antigua','Maldita']},
     armadura: {names:['Protección','Escama'], qualities:['Ligera','Pesada']},
   },
@@ -971,7 +970,8 @@ const EQUIP_SLOTS = [
   {id:'auxiliar',  label:'Auxiliar',   icon:'🛡', types:['escudo','arma']},
   {id:'cabeza',    label:'Cabeza',     icon:'⛑', types:['yelmo']},
   {id:'torso',     label:'Torso',      icon:'🥋', types:['armadura']},
-  {id:'accesorio1',label:'Accesorio 1',icon:'💍', types:['accesorio']},
+  {id:'accesorio1',label:'Accesorio chest-bias
+', types:['accesorio']},
   {id:'accesorio2',label:'Accesorio 2',icon:'💍', types:['accesorio']},
   {id:'accesorio3',label:'Accesorio 3',icon:'💍', types:['accesorio']},
 ];
@@ -988,7 +988,12 @@ const DICT_TYPES = [
 // HELPERS MATEMÁTICOS
 // ============================================================
 function floorMod(attr){ return Math.floor((attr-10)/2); }
-function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+function randInt(min,max){ 
+  const b=APP.chestBias!==undefined?APP.chestBias:0.5;
+  const r=Math.random();
+  const exp=b<0.5?1+(1-b*2)*4:b===0.5?1:Math.max(0.1,1-(b-0.5)*2);
+  return Math.round(min+Math.pow(r,exp)*(max-min));
+}
 function randFrom(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 function generateId(){ return Date.now().toString(36)+Math.random().toString(36).substr(2,5); }
 function diceMean(num,sides){ return num*(sides+1)/2; }
