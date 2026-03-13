@@ -1969,7 +1969,6 @@ function createManualEnemy(){
   showToast(`"${enemy.name}" creado ✓`,'success');
 }
 function renderEnemies(){
-  function renderEnemies(){
   const grid=document.getElementById('enemies-grid'); if(!grid) return;
   if(APP.enemies.length===0){
     grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><span class="empty-icon">💀</span><p>No hay enemigos</p></div>`;
