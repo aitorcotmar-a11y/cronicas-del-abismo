@@ -860,8 +860,10 @@ window.APP = {  masterPassword: 'master123',
     legendario:     { price: 1000, minVal: 401, maxVal: 999 },
   },
   chestBias: 0,
-  dictionary: {},
-};
+  dictionary: {
+  arma: { names:['Filo','Muerte','Tormenta'], qualities:['Oxidada','Antigua','Maldita'] },
+  armadura: { names:['Protección','Escama'], qualities:['Ligera','Pesada'] },
+},
 
 // ============================================================
 // CONSTANTES DE JUEGO
@@ -1117,6 +1119,11 @@ function showToast(msg, type='info', duration=3000){
 // ============================================================
 function renderItemCard(item){
   const rarity=RARITY_TABLE.find(r=>r.key===item.rarity)||RARITY_TABLE[0];
+  const rarityColors={
+    common:'var(--rarity-common)',rare:'var(--rarity-rare)',great:'var(--rarity-great)',
+    extra:'var(--rarity-extra)',legendary:'var(--rarity-legendary)',unique:'var(--rarity-unique)'
+  };
+  const color=rarityColors[item.rarity]||'var(--text-main)';
   const statsHtml=Object.entries(item.stats||{}).map(([k,v])=>{
     let dv=v;
     if(k==='Reduccion de Daño') dv=Math.round((parseInt(v)||0)/10);
@@ -1124,15 +1131,16 @@ function renderItemCard(item){
   }).join('');
   return `
     <div class="item-type">${item.subtype||item.type}</div>
-    <div class="item-name">${item.name||'-'}</div>
-    <div class="item-quality">${item.quality||'-'}</div>
+    <div style="margin-bottom:4px">
+      <span class="item-name" style="color:${color}">${item.name||'-'}</span>
+      ${item.quality&&item.quality!=='-'?`<span style="color:var(--text-dim);font-style:italic;font-size:0.85rem"> · ${item.quality}</span>`:''}
+    </div>
     <div style="margin:5px 0"><span class="badge badge-${item.rarity}">${rarity.name}</span></div>
     <div class="item-stats">${statsHtml}</div>
     ${item.description?`<div style="font-size:0.8rem;color:var(--text-dim);font-style:italic;margin-top:6px">${item.description}</div>`:''}
     <div class="item-value">🪙 <span>${item.value||0}</span></div>
   `;
 }
-
 // ============================================================
 // CÁLCULO DE STATS DEL JUGADOR
 // ============================================================
@@ -1963,6 +1971,7 @@ function renderEnemies(){
     return;
   }
   grid.innerHTML=APP.enemies.map(e=>{
+  try{
     if(e.currentHp===undefined) e.currentHp=e.vida;
     const pct=Math.max(0,Math.min(100,(e.currentHp/e.vida)*100));
     const barColor=pct>60?'var(--green)':pct>30?'var(--gold)':'var(--red)';
@@ -2001,6 +2010,7 @@ function renderEnemies(){
         <div class="stat-cell"><div class="stat-label">Salvación</div><div class="stat-value" style="font-size:0.85rem">${e.salvacion}</div></div>
       </div>
     </div>`;
+}catch(err){ return `<div class="card" style="border-color:red"><p style="color:red">${e.name}: ${err.message}</p></div>`; }
   }).join('');
 }
 function changeEnemyHp(id, dir, useAmount=false){
