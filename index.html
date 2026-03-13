@@ -1956,13 +1956,17 @@ function createManualEnemy(){
   showToast(`"${enemy.name}" creado ✓`,'success');
 }
 function renderEnemies(){
+  function renderEnemies(){
   const grid=document.getElementById('enemies-grid'); if(!grid) return;
   if(APP.enemies.length===0){
     grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><span class="empty-icon">💀</span><p>No hay enemigos</p></div>`;
     return;
   }
-  grid.innerHTML=APP.enemies.map(e=>`
-    <div class="card" style="border-color:rgba(201,64,64,0.3)">
+  grid.innerHTML=APP.enemies.map(e=>{
+    if(e.currentHp===undefined) e.currentHp=e.vida;
+    const pct=Math.max(0,Math.min(100,(e.currentHp/e.vida)*100));
+    const barColor=pct>60?'var(--green)':pct>30?'var(--gold)':'var(--red)';
+    return `<div class="card" style="border-color:rgba(201,64,64,0.3)">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
         <h3 style="color:var(--red-bright);font-size:0.95rem;margin:0">${e.name}</h3>
         <div style="display:flex;gap:5px">
@@ -1970,18 +1974,48 @@ function renderEnemies(){
           <button class="btn btn-danger btn-sm" onclick="deleteEnemy('${e.id}')">🗑</button>
         </div>
       </div>
-      <div class="stat-block" style="grid-template-columns:repeat(3,1fr);word-break:break-all">
-        <div class="stat-cell"><div class="stat-label">Vida</div><div class="stat-value" style="font-size:1rem">${e.vida}</div></div>
-        <div class="stat-cell"><div class="stat-label">Armadura</div><div class="stat-value" style="font-size:1rem">${e.armadura}</div></div>
-        <div class="stat-cell"><div class="stat-label">Red.Daño</div><div class="stat-value" style="font-size:1rem">${Math.round(e.reduccionDaño/10)}</div></div>
-        <div class="stat-cell"><div class="stat-label">Movim.</div><div class="stat-value" style="font-size:1rem">${e.movimiento}m</div></div>
-        <div class="stat-cell"><div class="stat-label">Ataque</div><div class="stat-value" style="font-size:1rem">${e.ataque}</div></div>
-        <div class="stat-cell"><div class="stat-label">D.Golpe</div><div class="stat-value" style="font-size:1rem">${e.dadoGolpe}</div></div>
-        <div class="stat-cell"><div class="stat-label">Daño</div><div class="stat-value" style="font-size:1rem">${e.daño}</div></div>
-        <div class="stat-cell"><div class="stat-label">Salvación</div><div class="stat-value" style="font-size:1rem">${e.salvacion}</div></div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px">
+        <button class="btn btn-danger btn-sm" onclick="changeEnemyHp('${e.id}',-1)">−</button>
+        <div style="text-align:center">
+          <span style="font-family:var(--font-mono);font-size:1.6rem;color:var(--red-bright)">${e.currentHp}</span>
+          <span style="font-family:var(--font-mono);color:var(--text-dim)"> / ${e.vida}</span>
+        </div>
+        <button class="btn btn-success btn-sm" onclick="changeEnemyHp('${e.id}',1)">+</button>
       </div>
-    </div>
-  `).join('');
+      <div style="display:flex;gap:6px;align-items:center;margin-bottom:10px">
+        <input type="number" id="ehp-${e.id}" value="1" min="1" style="width:60px;text-align:center;font-family:var(--font-mono);font-size:0.85rem">
+        <button class="btn btn-danger btn-sm" onclick="changeEnemyHp('${e.id}',-1,true)">− Restar</button>
+        <button class="btn btn-success btn-sm" onclick="changeEnemyHp('${e.id}',1,true)">+ Sumar</button>
+        <button class="btn btn-sm" onclick="resetEnemyHp('${e.id}')">↺</button>
+      </div>
+      <div style="background:var(--bg-elevated);border-radius:4px;height:8px;overflow:hidden;margin-bottom:10px">
+        <div style="height:100%;border-radius:4px;width:${pct}%;background:${barColor};transition:width 0.3s ease"></div>
+      </div>
+      <div class="stat-block" style="grid-template-columns:repeat(3,1fr);word-break:break-all">
+        <div class="stat-cell"><div class="stat-label">Armadura</div><div class="stat-value" style="font-size:0.85rem">${e.armadura}</div></div>
+        <div class="stat-cell"><div class="stat-label">Red.Daño</div><div class="stat-value" style="font-size:0.85rem">${Math.round(e.reduccionDaño/10)}</div></div>
+        <div class="stat-cell"><div class="stat-label">Movim.</div><div class="stat-value" style="font-size:0.85rem">${e.movimiento}m</div></div>
+        <div class="stat-cell"><div class="stat-label">Ataque</div><div class="stat-value" style="font-size:0.85rem">${e.ataque}</div></div>
+        <div class="stat-cell"><div class="stat-label">D.Golpe</div><div class="stat-value" style="font-size:0.85rem">${e.dadoGolpe}</div></div>
+        <div class="stat-cell"><div class="stat-label">Daño</div><div class="stat-value" style="font-size:0.85rem">${e.daño}</div></div>
+        <div class="stat-cell"><div class="stat-label">Salvación</div><div class="stat-value" style="font-size:0.85rem">${e.salvacion}</div></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function changeEnemyHp(id, dir, useAmount=false){
+  const e=APP.enemies.find(x=>x.id===id); if(!e) return;
+  if(e.currentHp===undefined) e.currentHp=e.vida;
+  const amount=useAmount?(parseInt(document.getElementById('ehp-'+id)?.value)||1):1;
+  e.currentHp=Math.max(0,Math.min(e.vida,e.currentHp+dir*amount));
+  fbSaveEnemies();
+  renderEnemies();
+}
+function resetEnemyHp(id){
+  const e=APP.enemies.find(x=>x.id===id); if(!e) return;
+  e.currentHp=e.vida;
+  fbSaveEnemies();
+  renderEnemies();
 }
 function copyEnemy(id){
   const orig=APP.enemies.find(e=>e.id===id); if(!orig) return;
@@ -2610,8 +2644,7 @@ window.addEventListener('firebase-ready',async()=>{
   if(APP.currentScreen==='player-select') renderPlayerSelectList();
   console.log('🔥 Firebase listo');
 });
-
-
+} 
 </script>
 
 </body>
