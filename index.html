@@ -529,6 +529,7 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;hei
       <div class="section-title">
         <h2>💀 Enemigos</h2><div class="title-line"></div>
         <button class="btn btn-danger" onclick="clearAllEnemies()">🗑 Borrar todos</button>
+        <button class="btn btn-gold" onclick="openRewardModal()">💰 Repartir Oro</button>
       </div>
       <div class="grid-2 mb-16">
         <div class="card">
@@ -1967,6 +1968,53 @@ function createManualEnemy(){
   renderEnemies();
   closeModal('modal-create-enemy');
   showToast(`"${enemy.name}" creado ✓`,'success');
+}
+function openRewardModal(){
+  const playerOpts=Object.values(APP.players).map(p=>`<label style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><input type="checkbox" value="${p.id}" checked> ${p.name}</label>`).join('');
+  document.getElementById('modal-confirm').innerHTML=`
+    <div class="modal-box" style="max-width:400px">
+      <h3 style="margin-bottom:16px">💰 Repartir Recompensa</h3>
+      <div class="form-group">
+        <label>Oro total a repartir</label>
+        <input type="number" id="reward-total" value="100" min="1" style="width:100%">
+      </div>
+      <div class="form-group">
+        <label>Jugadores</label>
+        <div id="reward-players">${playerOpts}</div>
+      </div>
+      <div style="color:var(--gold);font-size:0.85rem;margin-bottom:16px" id="reward-preview"></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-gold w-full" onclick="doReward()">✓ Repartir</button>
+        <button class="btn w-full" onclick="closeModal('modal-confirm')">Cancelar</button>
+      </div>
+    </div>
+  `;
+  openModal('modal-confirm');
+  document.getElementById('reward-total').addEventListener('input', updateRewardPreview);
+  document.querySelectorAll('#reward-players input').forEach(cb=>cb.addEventListener('change', updateRewardPreview));
+  updateRewardPreview();
+}
+
+function updateRewardPreview(){
+  const total=parseInt(document.getElementById('reward-total')?.value)||0;
+  const checked=document.querySelectorAll('#reward-players input:checked');
+  const n=checked.length;
+  const each=n>0?Math.floor(total/n):0;
+  document.getElementById('reward-preview').textContent=n>0?`Cada jugador recibe: ${each} 🪙`:'Selecciona jugadores';
+}
+
+function doReward(){
+  const total=parseInt(document.getElementById('reward-total')?.value)||0;
+  const checked=[...document.querySelectorAll('#reward-players input:checked')];
+  if(checked.length===0){ showToast('Selecciona jugadores','error'); return; }
+  const each=Math.floor(total/checked.length);
+  checked.forEach(cb=>{
+    const p=APP.players[cb.value]; if(!p) return;
+    p.coins=(p.coins||0)+each;
+    fbSavePlayer(p.id);
+  });
+  closeModal('modal-confirm');
+  showToast(`${each} 🪙 repartidos a ${checked.length} jugadores`,'success');
 }
 function renderEnemies(){
   const grid=document.getElementById('enemies-grid'); if(!grid) return;
