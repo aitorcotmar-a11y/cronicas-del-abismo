@@ -2652,14 +2652,15 @@ function initRealtimeListeners(){
     if(APP.currentScreen==='master') renderMasterScrolls();
   });
 }
-window.addEventListener('firebase-ready',async()=>{
+async function onFirebaseReady(){
   APP.firebaseReady=true;
   await loadFromFirebase();
   initRealtimeListeners();
   if(APP.currentScreen==='player-select') renderPlayerSelectList();
   console.log('🔥 Firebase listo');
-});
-} 
+}
+window.addEventListener('firebase-ready', onFirebaseReady);
+if(window._firebaseReady) onFirebaseReady();
 </script>
 
 </body>
